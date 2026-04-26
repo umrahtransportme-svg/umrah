@@ -1,0 +1,81 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+import { generateBookingRef } from '@/lib/utils'
+import { buildBookingMessage } from '@/lib/whatsapp'
+
+const bookingSchema = z.object({
+  serviceType: z.string().min(1),
+  pickupLocation: z.string().min(1),
+  dropoffLocation: z.string().min(1),
+  travelDate: z.string().min(1),
+  travelTime: z.string().min(1),
+  passengers: z.number().min(1).max(20),
+  vehicleType: z.string().min(1),
+  fullName: z.string().min(2),
+  whatsappNumber: z.string().min(8),
+  country: z.string().min(1),
+  email: z.string().email(),
+  specialRequests: z.string().optional(),
+})
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const data = bookingSchema.parse(body)
+
+    const bookingRef = generateBookingRef()
+
+    const whatsappMessage = buildBookingMessage({
+      service: data.serviceType,
+      pickup: data.pickupLocation,
+      dropoff: data.dropoffLocation,
+      date: data.travelDate,
+      time: data.travelTime,
+      passengers: data.passengers,
+      vehicle: data.vehicleType,
+      name: data.fullName,
+      bookingRef,
+    })
+
+    const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000'}?text=${encodeURIComponent(whatsappMessage)}`
+
+    // In production: save to database, send email confirmation etc.
+    const booking = {
+      id: crypto.randomUUID(),
+      bookingRef,
+      ...data,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    }
+
+    console.log('New booking created:', bookingRef)
+
+    return NextResponse.json({
+      success: true,
+      bookingRef,
+      whatsappUrl,
+      message: 'Booking received. Please complete via WhatsApp.',
+      booking,
+    })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { success: false, errors: error.errors },
+        { status: 400 }
+      )
+    }
+
+    console.error('Booking error:', error)
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function GET() {
+  return NextResponse.json(
+    { message: 'Booking API — use POST to create a booking' },
+    { status: 200 }
+  )
+}
