@@ -32,6 +32,8 @@ const config: Config = {
         'slide-in-right': 'slideInRight 0.6s ease-out forwards',
         'float': 'float 3s ease-in-out infinite',
         'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+        'slide-in': 'slide-in 0.25s ease',
+        'shimmer': 'shimmer 1.5s infinite',
       },
       keyframes: {
         fadeIn: {
@@ -54,6 +56,8 @@ const config: Config = {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.7' },
         },
+        'slide-in': { from: { transform: 'translateX(-100%)' }, to: { transform: 'translateX(0)' } },
+        shimmer: { '100%': { transform: 'translateX(100%)' } },
       },
       boxShadow: {
         'card': '0 4px 24px -4px rgba(0, 0, 0, 0.08)',
