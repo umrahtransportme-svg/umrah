@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import type { CartItem } from '@/types'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-04-22.dahlia',
-})
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) throw new Error('STRIPE_SECRET_KEY is not set')
+  return new Stripe(key)
+}
 
 export async function POST(request: Request) {
   try {
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
       },
     }))
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
       line_items: lineItems,
