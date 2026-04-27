@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import AdminSidebar from '@/components/admin/layout/Sidebar'
 import AdminDashboardHeader from '@/components/admin/layout/DashboardHeader'
+import { seedAdminStore } from '@/lib/admin/store'
 
 const PAGE_TITLES: Record<string, string> = {
   '/admin/dashboard':      'Dashboard',
@@ -27,6 +28,10 @@ const PAGE_TITLES: Record<string, string> = {
 export default function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
+
+  useEffect(() => {
+    seedAdminStore()
+  }, [])
 
   const title = Object.entries(PAGE_TITLES).find(([path]) => pathname.startsWith(path))?.[1] ?? 'Admin'
 
