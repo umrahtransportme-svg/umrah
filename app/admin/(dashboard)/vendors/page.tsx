@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Search, Plus, Edit2, Trash2, Building2, Save, CheckCircle2, XCircle, Clock, CreditCard, RefreshCw, ExternalLink } from 'lucide-react'
+import { Search, Plus, Edit2, Trash2, Building2, Save, CheckCircle2, XCircle, Clock, CreditCard, RefreshCw, ExternalLink, Database } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import AdminModal from '@/components/admin/ui/Modal'
 
@@ -48,6 +48,8 @@ export default function AdminVendorsPage() {
   const [payoutForm, setPayoutForm] = useState({ vendorId: '', amount: '', currency: 'GBP', method: 'bank', period: '', notes: '' })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [syncing, setSyncing] = useState(false)
+  const [syncMsg, setSyncMsg] = useState<string | null>(null)
 
   const loadVendors = useCallback(async () => {
     const r = await fetch('/api/admin/vendors')
@@ -110,6 +112,17 @@ export default function AdminVendorsPage() {
     await loadVendors()
   }
 
+  async function syncDb() {
+    setSyncing(true)
+    setSyncMsg(null)
+    const r = await fetch('/api/admin/db-sync', { method: 'POST' })
+    const data = await r.json()
+    setSyncMsg(data.results?.join(' · ') || data.error || 'Done')
+    setSyncing(false)
+    await loadVendors()
+    await loadPayouts()
+  }
+
   return (
     <div className="space-y-4">
       {/* Tabs */}
@@ -130,10 +143,14 @@ export default function AdminVendorsPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
               <input type="search" placeholder="Search vendor..." value={search} onChange={(e) => setSearch(e.target.value)} className="input pl-9 text-sm" />
             </div>
+            <button onClick={syncDb} disabled={syncing} title="Create DB tables if missing" className="inline-flex items-center gap-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-colors disabled:opacity-60">
+              <Database className="w-3.5 h-3.5" /> {syncing ? 'Syncing…' : 'Sync DB'}
+            </button>
             <button onClick={() => { setForm(BLANK); setModal('add') }} className="inline-flex items-center gap-1 px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium rounded-lg transition-colors">
               <Plus className="w-3.5 h-3.5" /> Add Vendor
             </button>
           </div>
+          {syncMsg && <p className="text-xs text-slate-500 bg-slate-50 px-3 py-2 rounded-lg">{syncMsg}</p>}
 
           {filtered.length === 0 ? (
             <div className="card p-12 text-center"><Building2 className="w-8 h-8 text-slate-300 mx-auto mb-2" /><p className="text-sm text-slate-500">No vendors found</p></div>
