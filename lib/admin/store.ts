@@ -147,11 +147,23 @@ const INITIAL_INTEGRATIONS: AdminIntegration[] = [
   // Automation
   { id: 'zapier', name: 'Zapier', description: 'Automate workflows between apps without code.', category: 'Automation', connected: false, status: 'disconnected', icon: '⚡', docsUrl: 'https://zapier.com', apiKey: '', webhookUrl: '', extraConfig: {} },
   { id: 'make', name: 'Make (Integromat)', description: 'Advanced visual automation between hundreds of apps.', category: 'Automation', connected: false, status: 'disconnected', icon: '🔗', docsUrl: 'https://www.make.com/en/api-documentation', apiKey: '', webhookUrl: '', extraConfig: {} },
+  // Payments
+  { id: 'paypal-payments', name: 'PayPal', description: 'Accept PayPal, card, and Pay Later payments from customers.', category: 'Payments', connected: false, status: 'disconnected', icon: '🅿️', docsUrl: 'https://developer.paypal.com/docs/api/overview', apiKey: '', webhookUrl: '', extraConfig: { clientId: '', mode: 'sandbox' } },
+  { id: 'square', name: 'Square', description: 'Accept cards, Apple Pay, Google Pay and in-person payments.', category: 'Payments', connected: false, status: 'disconnected', icon: '⬛', docsUrl: 'https://developer.squareup.com/docs', apiKey: '', webhookUrl: '', extraConfig: { locationId: '', applicationId: '' } },
+  { id: 'braintree', name: 'Braintree', description: 'PayPal-owned gateway supporting cards, PayPal, Venmo & wallets.', category: 'Payments', connected: false, status: 'disconnected', icon: '🌿', docsUrl: 'https://developer.paypal.com/braintree/docs', apiKey: '', webhookUrl: '', extraConfig: { merchantId: '', publicKey: '' } },
+  { id: 'worldpay', name: 'Worldpay', description: 'Enterprise payment processing for cards and global methods.', category: 'Payments', connected: false, status: 'disconnected', icon: '🌍', docsUrl: 'https://developer.worldpay.com', apiKey: '', webhookUrl: '', extraConfig: { merchantCode: '' } },
+  { id: 'klarna', name: 'Klarna', description: 'Buy Now Pay Later — let customers split payments into instalments.', category: 'Payments', connected: false, status: 'disconnected', icon: '🛍️', docsUrl: 'https://docs.klarna.com', apiKey: '', webhookUrl: '', extraConfig: { username: '' } },
+  { id: 'revolut', name: 'Revolut Business', description: 'Accept payments and manage multi-currency business accounts.', category: 'Payments', connected: false, status: 'disconnected', icon: '🔵', docsUrl: 'https://developer.revolut.com/docs', apiKey: '', webhookUrl: '', extraConfig: { merchantId: '' } },
+  // Banking
+  { id: 'gocardless', name: 'GoCardless', description: 'Direct Debit and Open Banking payments for recurring or one-off transfers.', category: 'Banking', connected: false, status: 'disconnected', icon: '🏦', docsUrl: 'https://developer.gocardless.com', apiKey: '', webhookUrl: '', extraConfig: { environment: 'sandbox' } },
+  { id: 'plaid', name: 'Plaid', description: 'Bank account verification and Open Banking data for UK, US & EU.', category: 'Banking', connected: false, status: 'disconnected', icon: '🔐', docsUrl: 'https://plaid.com/docs', apiKey: '', webhookUrl: '', extraConfig: { clientId: '', environment: 'sandbox' } },
+  { id: 'truelayer', name: 'TrueLayer', description: 'Open Banking payments and account data for UK & Europe.', category: 'Banking', connected: false, status: 'disconnected', icon: '🏛️', docsUrl: 'https://docs.truelayer.com', apiKey: '', webhookUrl: '', extraConfig: { clientId: '' } },
   // Payouts
-  { id: 'paypal', name: 'PayPal', description: 'Accept PayPal payments and pay out vendors via PayPal Payouts API.', category: 'Payouts', connected: false, status: 'disconnected', icon: '🅿️', docsUrl: 'https://developer.paypal.com/docs/payouts', apiKey: '', webhookUrl: '', extraConfig: { clientId: '', mode: 'sandbox' } },
+  { id: 'paypal', name: 'PayPal Payouts', description: 'Pay out vendors via PayPal Payouts API — single or batch.', category: 'Payouts', connected: false, status: 'disconnected', icon: '💰', docsUrl: 'https://developer.paypal.com/docs/payouts', apiKey: '', webhookUrl: '', extraConfig: { clientId: '', mode: 'sandbox' } },
   { id: 'wise', name: 'Wise (TransferWise)', description: 'International vendor payouts at mid-market exchange rates.', category: 'Payouts', connected: false, status: 'disconnected', icon: '💸', docsUrl: 'https://docs.wise.com/api-docs', apiKey: '', webhookUrl: '', extraConfig: { profileId: '' } },
   { id: 'payoneer', name: 'Payoneer', description: 'Global mass payouts to vendors and contractors worldwide.', category: 'Payouts', connected: false, status: 'disconnected', icon: '🌐', docsUrl: 'https://developer.payoneer.com', apiKey: '', webhookUrl: '', extraConfig: { programId: '' } },
   { id: 'stripe-connect', name: 'Stripe Connect', description: 'Split payments and automated vendor payouts via Stripe Connect.', category: 'Payouts', connected: false, status: 'disconnected', icon: '🔀', docsUrl: 'https://stripe.com/docs/connect', apiKey: '', webhookUrl: '', extraConfig: { connectAccountId: '' } },
+  { id: 'revolut-payouts', name: 'Revolut Payouts', description: 'Send bulk payouts to vendor bank accounts via Revolut Business API.', category: 'Payouts', connected: false, status: 'disconnected', icon: '⚡', docsUrl: 'https://developer.revolut.com/docs/business/business-api', apiKey: '', webhookUrl: '', extraConfig: { accountId: '' } },
 ]
 
 const INITIAL_AUTOMATION: AutomationRule[] = [
@@ -366,7 +378,7 @@ export const useAdminStore = create<AdminStore>()(
         set((s) => ({ automationRules: s.automationRules.filter((r) => r.id !== id) })),
     }),
     {
-      name: 'umratransport-admin-v2',
+      name: 'umratransport-admin-v3',
       storage: createJSONStorage(() => localStorage),
     },
   ),

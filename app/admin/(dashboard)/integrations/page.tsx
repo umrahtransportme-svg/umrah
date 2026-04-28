@@ -7,7 +7,7 @@ import AdminModal from '@/components/admin/ui/Modal'
 import { useAdminStore } from '@/lib/admin/store'
 import type { AdminIntegration } from '@/lib/admin/store'
 
-const categories = ['Payments', 'Payouts', 'Messaging', 'Scheduling', 'CRM', 'Maps', 'Marketing', 'Analytics', 'Automation']
+const categories = ['Payments', 'Banking', 'Payouts', 'Messaging', 'Scheduling', 'CRM', 'Maps', 'Marketing', 'Analytics', 'Automation']
 
 export default function AdminIntegrationsPage() {
   const { integrations, updateIntegration } = useAdminStore()
@@ -58,9 +58,43 @@ export default function AdminIntegrationsPage() {
     ghl: [
       { key: 'locationId', label: 'Location / Sub-Account ID', placeholder: 'your-location-id' },
     ],
+    // Payments
+    'paypal-payments': [
+      { key: 'clientId', label: 'Client ID', placeholder: 'AaBbCcDd...' },
+      { key: 'mode', label: 'Mode', placeholder: 'sandbox or live' },
+    ],
+    square: [
+      { key: 'applicationId', label: 'Application ID', placeholder: 'sq0idp-...' },
+      { key: 'locationId', label: 'Location ID', placeholder: 'LXXXXXXXXXXXXXXXX' },
+    ],
+    braintree: [
+      { key: 'merchantId', label: 'Merchant ID', placeholder: 'your_merchant_id' },
+      { key: 'publicKey', label: 'Public Key', placeholder: 'your_public_key' },
+    ],
+    worldpay: [
+      { key: 'merchantCode', label: 'Merchant Code', placeholder: 'MYMERCHANT01' },
+    ],
+    klarna: [
+      { key: 'username', label: 'API Username', placeholder: 'PK12345_xxx' },
+    ],
+    revolut: [
+      { key: 'merchantId', label: 'Merchant ID', placeholder: 'your-merchant-id' },
+    ],
+    // Banking
+    gocardless: [
+      { key: 'environment', label: 'Environment', placeholder: 'sandbox or live' },
+    ],
+    plaid: [
+      { key: 'clientId', label: 'Client ID', placeholder: 'your-client-id' },
+      { key: 'environment', label: 'Environment', placeholder: 'sandbox, development or production' },
+    ],
+    truelayer: [
+      { key: 'clientId', label: 'Client ID', placeholder: 'your-client-id' },
+    ],
+    // Payouts
     paypal: [
       { key: 'clientId', label: 'Client ID', placeholder: 'AaBbCcDd...' },
-      { key: 'mode', label: 'Mode (sandbox / live)', placeholder: 'live' },
+      { key: 'mode', label: 'Mode', placeholder: 'sandbox or live' },
     ],
     wise: [
       { key: 'profileId', label: 'Profile ID', placeholder: '12345678' },
@@ -70,6 +104,9 @@ export default function AdminIntegrationsPage() {
     ],
     'stripe-connect': [
       { key: 'connectAccountId', label: 'Connect Account ID', placeholder: 'acct_xxx' },
+    ],
+    'revolut-payouts': [
+      { key: 'accountId', label: 'Business Account ID', placeholder: 'your-account-id' },
     ],
     mailchimp: [
       { key: 'listId', label: 'Audience / List ID', placeholder: 'abc123def4' },
