@@ -77,9 +77,9 @@ model Setting {
 }
 
 model Booking {
-  id               String   @id @default(cuid())
-  reference        String   @unique
-  status           String   @default("pending")
+  id               String          @id @default(cuid())
+  reference        String          @unique
+  status           String          @default("pending")
   serviceType      String
   pickupLocation   String
   dropoffLocation  String
@@ -90,15 +90,61 @@ model Booking {
   customerEmail    String
   customerWhatsapp String
   customerCountry  String
-  totalAmount      Float    @default(0)
+  totalAmount      Float           @default(0)
+  vendorAmount     Float           @default(0)
   driverId         String?
   notes            String?
   userId           String?
-  user             User?    @relation(fields: [userId], references: [id])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  vendorId         String?
+  refunded         Boolean         @default(false)
+  refundAmount     Float           @default(0)
+  user             User?           @relation(fields: [userId], references: [id])
+  vendor           VendorAccount?  @relation(fields: [vendorId], references: [id])
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
   @@map("bookings")
+}
+
+model VendorAccount {
+  id             String    @id @default(cuid())
+  companyName    String
+  contactName    String
+  email          String    @unique
+  phone          String?
+  passwordHash   String
+  status         String    @default("pending")
+  city           String?
+  country        String    @default("Saudi Arabia")
+  commissionRate Float     @default(15)
+  payoutMethod   String    @default("bank")
+  payoutDetails  Json      @default("{}")
+  payoutSchedule String    @default("monthly")
+  payoutDay      Int       @default(1)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  bookings       Booking[]
+  payouts        Payout[]
+
+  @@map("vendor_accounts")
+}
+
+model Payout {
+  id        String        @id @default(cuid())
+  vendorId  String
+  vendor    VendorAccount @relation(fields: [vendorId], references: [id])
+  amount    Float
+  currency  String        @default("GBP")
+  status    String        @default("pending")
+  method    String
+  reference String?
+  period    String?
+  notes     String?
+  paidAt    DateTime?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("payouts")
 }
 
 model Driver {

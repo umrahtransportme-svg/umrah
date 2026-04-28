@@ -147,6 +147,11 @@ const INITIAL_INTEGRATIONS: AdminIntegration[] = [
   // Automation
   { id: 'zapier', name: 'Zapier', description: 'Automate workflows between apps without code.', category: 'Automation', connected: false, status: 'disconnected', icon: '⚡', docsUrl: 'https://zapier.com', apiKey: '', webhookUrl: '', extraConfig: {} },
   { id: 'make', name: 'Make (Integromat)', description: 'Advanced visual automation between hundreds of apps.', category: 'Automation', connected: false, status: 'disconnected', icon: '🔗', docsUrl: 'https://www.make.com/en/api-documentation', apiKey: '', webhookUrl: '', extraConfig: {} },
+  // Payouts
+  { id: 'paypal', name: 'PayPal', description: 'Accept PayPal payments and pay out vendors via PayPal Payouts API.', category: 'Payouts', connected: false, status: 'disconnected', icon: '🅿️', docsUrl: 'https://developer.paypal.com/docs/payouts', apiKey: '', webhookUrl: '', extraConfig: { clientId: '', mode: 'sandbox' } },
+  { id: 'wise', name: 'Wise (TransferWise)', description: 'International vendor payouts at mid-market exchange rates.', category: 'Payouts', connected: false, status: 'disconnected', icon: '💸', docsUrl: 'https://docs.wise.com/api-docs', apiKey: '', webhookUrl: '', extraConfig: { profileId: '' } },
+  { id: 'payoneer', name: 'Payoneer', description: 'Global mass payouts to vendors and contractors worldwide.', category: 'Payouts', connected: false, status: 'disconnected', icon: '🌐', docsUrl: 'https://developer.payoneer.com', apiKey: '', webhookUrl: '', extraConfig: { programId: '' } },
+  { id: 'stripe-connect', name: 'Stripe Connect', description: 'Split payments and automated vendor payouts via Stripe Connect.', category: 'Payouts', connected: false, status: 'disconnected', icon: '🔀', docsUrl: 'https://stripe.com/docs/connect', apiKey: '', webhookUrl: '', extraConfig: { connectAccountId: '' } },
 ]
 
 const INITIAL_AUTOMATION: AutomationRule[] = [

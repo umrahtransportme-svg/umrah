@@ -7,7 +7,7 @@ import AdminModal from '@/components/admin/ui/Modal'
 import { useAdminStore } from '@/lib/admin/store'
 import type { AdminIntegration } from '@/lib/admin/store'
 
-const categories = ['Payments', 'Messaging', 'Scheduling', 'CRM', 'Maps', 'Marketing', 'Analytics', 'Automation']
+const categories = ['Payments', 'Payouts', 'Messaging', 'Scheduling', 'CRM', 'Maps', 'Marketing', 'Analytics', 'Automation']
 
 export default function AdminIntegrationsPage() {
   const { integrations, updateIntegration } = useAdminStore()
@@ -57,6 +57,19 @@ export default function AdminIntegrationsPage() {
     ],
     ghl: [
       { key: 'locationId', label: 'Location / Sub-Account ID', placeholder: 'your-location-id' },
+    ],
+    paypal: [
+      { key: 'clientId', label: 'Client ID', placeholder: 'AaBbCcDd...' },
+      { key: 'mode', label: 'Mode (sandbox / live)', placeholder: 'live' },
+    ],
+    wise: [
+      { key: 'profileId', label: 'Profile ID', placeholder: '12345678' },
+    ],
+    payoneer: [
+      { key: 'programId', label: 'Program ID', placeholder: 'your-program-id' },
+    ],
+    'stripe-connect': [
+      { key: 'connectAccountId', label: 'Connect Account ID', placeholder: 'acct_xxx' },
     ],
     mailchimp: [
       { key: 'listId', label: 'Audience / List ID', placeholder: 'abc123def4' },
