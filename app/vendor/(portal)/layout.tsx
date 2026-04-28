@@ -3,14 +3,17 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Building2, LayoutDashboard, CalendarDays, CreditCard, Settings, LogOut, Menu, X } from 'lucide-react'
+import { Building2, LayoutDashboard, CalendarDays, CreditCard, Settings, LogOut, Menu, X, Car, Users, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV = [
-  { href: '/vendor/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/vendor/bookings', label: 'Bookings', icon: CalendarDays },
-  { href: '/vendor/payments', label: 'Payments', icon: CreditCard },
-  { href: '/vendor/settings', label: 'Settings', icon: Settings },
+  { href: '/vendor/dashboard',  label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/vendor/bookings',   label: 'Bookings',  icon: CalendarDays },
+  { href: '/vendor/vehicles',   label: 'Vehicles',  icon: Car },
+  { href: '/vendor/drivers',    label: 'Drivers',   icon: Users },
+  { href: '/vendor/documents',  label: 'Documents', icon: FileText },
+  { href: '/vendor/payments',   label: 'Payments',  icon: CreditCard },
+  { href: '/vendor/settings',   label: 'Settings',  icon: Settings },
 ]
 
 export default function VendorPortalLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +38,7 @@ export default function VendorPortalLayout({ children }: { children: React.React
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {NAV.map(({ href, label, icon: Icon }) => (
           <Link key={href} href={href} onClick={() => setSidebarOpen(false)}
             className={cn('flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',

@@ -22,19 +22,24 @@ model ContentBlock {
 }
 
 model User {
-  id          String    @id @default(cuid())
-  email       String    @unique
-  name        String?
-  image       String?
-  googleId    String?   @unique
-  phone       String?
-  nationality String?
-  dateOfBirth String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  image          String?
+  googleId       String?   @unique
+  phone          String?
+  nationality    String?
+  dateOfBirth    String?
+  profilePicture String?   @db.Text
+  referralCode   String?   @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  passport    PassportDetail?
-  bookings    Booking[]
+  passport   PassportDetail?
+  bookings   Booking[]
+  savedCards SavedCard[]
+  complaints Complaint[]
+  referrals  Referral[]  @relation("ReferrerReferrals")
 
   @@map("users")
 }
@@ -123,8 +128,12 @@ model VendorAccount {
   payoutDay      Int       @default(1)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-  bookings       Booking[]
-  payouts        Payout[]
+
+  bookings  Booking[]
+  payouts   Payout[]
+  vehicles  VendorVehicle[]
+  drivers   VendorDriver[]
+  documents VendorDocument[]
 
   @@map("vendor_accounts")
 }
@@ -145,6 +154,120 @@ model Payout {
   updatedAt DateTime      @updatedAt
 
   @@map("payouts")
+}
+
+model VendorVehicle {
+  id                String        @id @default(cuid())
+  vendorId          String
+  vendor            VendorAccount @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  make              String
+  model             String
+  year              Int
+  plate             String        @unique
+  color             String?
+  capacity          Int
+  vehicleType       String
+  status            String        @default("pending")
+  regDoc            String?       @db.Text
+  regDocName        String?
+  insuranceDoc      String?       @db.Text
+  insuranceDocName  String?
+  roadworthyDoc     String?       @db.Text
+  roadworthyDocName String?
+  photoFront        String?       @db.Text
+  photoSide         String?       @db.Text
+  notes             String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@map("vendor_vehicles")
+}
+
+model VendorDriver {
+  id               String        @id @default(cuid())
+  vendorId         String
+  vendor           VendorAccount @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  fullName         String
+  email            String?
+  phone            String
+  nationality      String?
+  licenseNumber    String
+  licenseExpiry    String
+  status           String        @default("active")
+  licenseDoc       String?       @db.Text
+  licenseDocName   String?
+  passportDoc      String?       @db.Text
+  passportDocName  String?
+  photoUrl         String?       @db.Text
+  assignedVehicleId String?
+  notes            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@map("vendor_drivers")
+}
+
+model VendorDocument {
+  id         String        @id @default(cuid())
+  vendorId   String
+  vendor     VendorAccount @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  docType    String
+  label      String
+  fileData   String?       @db.Text
+  fileName   String?
+  status     String        @default("pending")
+  expiryDate String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@map("vendor_documents")
+}
+
+model SavedCard {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  last4          String
+  brand          String
+  expMonth       Int
+  expYear        Int
+  cardholderName String?
+  isDefault      Boolean  @default(false)
+  stripeId       String?
+  createdAt      DateTime @default(now())
+
+  @@map("saved_cards")
+}
+
+model Referral {
+  id           String   @id @default(cuid())
+  referrerId   String
+  referrer     User     @relation("ReferrerReferrals", fields: [referrerId], references: [id])
+  referredEmail String?
+  commission   Float    @default(10)
+  status       String   @default("pending")
+  paidAt       DateTime?
+  createdAt    DateTime @default(now())
+
+  @@map("referrals")
+}
+
+model Complaint {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  bookingRef String?
+  category   String
+  subject    String
+  message    String    @db.Text
+  status     String    @default("open")
+  priority   String    @default("normal")
+  response   String?   @db.Text
+  resolvedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("complaints")
 }
 
 model Driver {
