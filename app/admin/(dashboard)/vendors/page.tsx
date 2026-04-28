@@ -47,9 +47,16 @@ export default function AdminVendorsPage() {
   const [form, setForm] = useState(BLANK)
   const [payoutForm, setPayoutForm] = useState({ vendorId: '', amount: '', currency: 'GBP', method: 'bank', period: '', notes: '' })
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const loadVendors = useCallback(() => fetch('/api/admin/vendors').then((r) => r.json()).then(setVendors), [])
-  const loadPayouts = useCallback(() => fetch('/api/admin/payouts').then((r) => r.json()).then(setPayouts), [])
+  const loadVendors = useCallback(async () => {
+    const r = await fetch('/api/admin/vendors')
+    if (r.ok) setVendors(await r.json())
+  }, [])
+  const loadPayouts = useCallback(async () => {
+    const r = await fetch('/api/admin/payouts')
+    if (r.ok) setPayouts(await r.json())
+  }, [])
 
   useEffect(() => { loadVendors(); loadPayouts() }, [loadVendors, loadPayouts])
 
@@ -60,10 +67,18 @@ export default function AdminVendorsPage() {
 
   async function save() {
     setSaving(true)
+    setError(null)
+    let res: Response
     if (modal === 'add') {
-      await fetch('/api/admin/vendors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
-    } else if (modal === 'edit' && selected) {
-      await fetch(`/api/admin/vendors/${selected.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
+      res = await fetch('/api/admin/vendors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
+    } else {
+      res = await fetch(`/api/admin/vendors/${selected!.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
+    }
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      setError(data.error || `Server error ${res.status}`)
+      setSaving(false)
+      return
     }
     await loadVendors()
     setSaving(false)
@@ -240,9 +255,10 @@ export default function AdminVendorsPage() {
 
       {/* Add/Edit modal */}
       {(modal === 'add' || modal === 'edit') && (
-        <AdminModal open onClose={() => setModal(null)} title={modal === 'add' ? 'Add Vendor' : `Edit — ${selected?.companyName}`} size="lg"
+        <AdminModal open onClose={() => { setModal(null); setError(null) }} title={modal === 'add' ? 'Add Vendor' : `Edit — ${selected?.companyName}`} size="lg"
           footer={<>
-            <button onClick={() => setModal(null)} className="px-4 py-2 bg-white border border-slate-200 text-slate-700 text-xs font-medium rounded-lg hover:bg-slate-50">Cancel</button>
+            {error && <span className="text-xs text-red-600 flex-1">{error}</span>}
+            <button onClick={() => { setModal(null); setError(null) }} className="px-4 py-2 bg-white border border-slate-200 text-slate-700 text-xs font-medium rounded-lg hover:bg-slate-50">Cancel</button>
             <button onClick={save} disabled={saving} className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium rounded-lg disabled:opacity-60"><Save className="w-3.5 h-3.5" /> {saving ? 'Saving...' : 'Save'}</button>
           </>}>
           <div className="grid grid-cols-2 gap-4">
