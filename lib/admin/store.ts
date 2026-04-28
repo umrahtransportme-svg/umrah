@@ -361,7 +361,7 @@ export const useAdminStore = create<AdminStore>()(
         set((s) => ({ automationRules: s.automationRules.filter((r) => r.id !== id) })),
     }),
     {
-      name: 'umratransport-admin-v1',
+      name: 'umratransport-admin-v2',
       storage: createJSONStorage(() => localStorage),
     },
   ),
