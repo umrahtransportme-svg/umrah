@@ -7,7 +7,7 @@ import AdminModal from '@/components/admin/ui/Modal'
 import { useAdminStore } from '@/lib/admin/store'
 import type { AdminIntegration } from '@/lib/admin/store'
 
-const categories = ['Payments', 'Messaging', 'Maps', 'Marketing', 'Analytics', 'Automation']
+const categories = ['Payments', 'Messaging', 'Scheduling', 'CRM', 'Maps', 'Marketing', 'Analytics', 'Automation']
 
 export default function AdminIntegrationsPage() {
   const { integrations, updateIntegration } = useAdminStore()
@@ -43,6 +43,20 @@ export default function AdminIntegrationsPage() {
     twilio: [
       { key: 'accountSid', label: 'Account SID', placeholder: 'ACxxxxxxxx' },
       { key: 'fromNumber', label: 'From Number', placeholder: '+1 555 000 0000' },
+    ],
+    uchat: [
+      { key: 'botId', label: 'Bot / Flow ID', placeholder: 'your-bot-id' },
+    ],
+    'google-calendar': [
+      { key: 'calendarId', label: 'Calendar ID', placeholder: 'your-email@gmail.com or calendar ID' },
+      { key: 'serviceAccountEmail', label: 'Service Account Email (optional)', placeholder: 'service@project.iam.gserviceaccount.com' },
+    ],
+    calendly: [
+      { key: 'organizationUri', label: 'Organization URI', placeholder: 'https://api.calendly.com/organizations/xxx' },
+      { key: 'userUri', label: 'User URI (optional)', placeholder: 'https://api.calendly.com/users/xxx' },
+    ],
+    ghl: [
+      { key: 'locationId', label: 'Location / Sub-Account ID', placeholder: 'your-location-id' },
     ],
     mailchimp: [
       { key: 'listId', label: 'Audience / List ID', placeholder: 'abc123def4' },

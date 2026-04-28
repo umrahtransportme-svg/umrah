@@ -126,14 +126,27 @@ const INITIAL_PAGES: CMSPage[] = [
 ]
 
 const INITIAL_INTEGRATIONS: AdminIntegration[] = [
+  // Payments
   { id: 'stripe', name: 'Stripe', description: 'Payment processing for card, Apple Pay, and Google Pay.', category: 'Payments', connected: false, status: 'disconnected', icon: '💳', docsUrl: 'https://stripe.com/docs', apiKey: '', webhookUrl: '', extraConfig: {} },
+  // Messaging
   { id: 'whatsapp', name: 'WhatsApp Business', description: 'Send booking confirmations and driver updates via WhatsApp.', category: 'Messaging', connected: false, status: 'disconnected', icon: '💬', docsUrl: 'https://business.whatsapp.com', apiKey: '', webhookUrl: '', extraConfig: { phoneNumberId: '', accountId: '' } },
-  { id: 'google-maps', name: 'Google Maps', description: 'Route planning and distance calculation for transfers.', category: 'Maps', connected: false, status: 'disconnected', icon: '🗺️', docsUrl: 'https://developers.google.com/maps', apiKey: '', webhookUrl: '', extraConfig: {} },
-  { id: 'mailchimp', name: 'Mailchimp', description: 'Email marketing for promotions and newsletters.', category: 'Marketing', connected: false, status: 'disconnected', icon: '📧', docsUrl: 'https://mailchimp.com', apiKey: '', webhookUrl: '', extraConfig: { listId: '' } },
-  { id: 'google-analytics', name: 'Google Analytics 4', description: 'Website traffic and conversion tracking.', category: 'Analytics', connected: false, status: 'disconnected', icon: '📊', docsUrl: 'https://analytics.google.com', apiKey: '', webhookUrl: '', extraConfig: {} },
   { id: 'twilio', name: 'Twilio SMS', description: 'SMS notifications for booking updates.', category: 'Messaging', connected: false, status: 'disconnected', icon: '📱', docsUrl: 'https://twilio.com/docs', apiKey: '', webhookUrl: '', extraConfig: { accountSid: '', fromNumber: '' } },
-  { id: 'zapier', name: 'Zapier', description: 'Automate workflows between apps.', category: 'Automation', connected: false, status: 'disconnected', icon: '⚡', docsUrl: 'https://zapier.com', apiKey: '', webhookUrl: '', extraConfig: {} },
+  { id: 'uchat', name: 'UChat', description: 'Omni-channel chatbot for WhatsApp, Instagram & Facebook Messenger.', category: 'Messaging', connected: false, status: 'disconnected', icon: '🤖', docsUrl: 'https://app.uchat.com.au', apiKey: '', webhookUrl: '', extraConfig: { botId: '' } },
+  // Scheduling
+  { id: 'google-calendar', name: 'Google Calendar', description: 'Sync bookings to Google Calendar and manage driver schedules.', category: 'Scheduling', connected: false, status: 'disconnected', icon: '📅', docsUrl: 'https://developers.google.com/calendar', apiKey: '', webhookUrl: '', extraConfig: { calendarId: '', serviceAccountEmail: '' } },
+  { id: 'calendly', name: 'Calendly', description: 'Let customers self-schedule consultations and transfers.', category: 'Scheduling', connected: false, status: 'disconnected', icon: '🗓️', docsUrl: 'https://developer.calendly.com', apiKey: '', webhookUrl: '', extraConfig: { organizationUri: '', userUri: '' } },
+  // CRM
+  { id: 'ghl', name: 'GoHighLevel (GHL)', description: 'CRM, pipeline management, and automated follow-ups for leads.', category: 'CRM', connected: false, status: 'disconnected', icon: '🚀', docsUrl: 'https://highlevel.stoplight.io', apiKey: '', webhookUrl: '', extraConfig: { locationId: '' } },
+  // Maps
+  { id: 'google-maps', name: 'Google Maps', description: 'Route planning and distance calculation for transfers.', category: 'Maps', connected: false, status: 'disconnected', icon: '🗺️', docsUrl: 'https://developers.google.com/maps', apiKey: '', webhookUrl: '', extraConfig: {} },
+  // Marketing
+  { id: 'mailchimp', name: 'Mailchimp', description: 'Email marketing for promotions and newsletters.', category: 'Marketing', connected: false, status: 'disconnected', icon: '📧', docsUrl: 'https://mailchimp.com', apiKey: '', webhookUrl: '', extraConfig: { listId: '' } },
+  // Analytics
+  { id: 'google-analytics', name: 'Google Analytics 4', description: 'Website traffic and conversion tracking.', category: 'Analytics', connected: false, status: 'disconnected', icon: '📊', docsUrl: 'https://analytics.google.com', apiKey: '', webhookUrl: '', extraConfig: {} },
   { id: 'hotjar', name: 'Hotjar', description: 'Heatmaps and user session recordings.', category: 'Analytics', connected: false, status: 'disconnected', icon: '🔥', docsUrl: 'https://hotjar.com', apiKey: '', webhookUrl: '', extraConfig: {} },
+  // Automation
+  { id: 'zapier', name: 'Zapier', description: 'Automate workflows between apps without code.', category: 'Automation', connected: false, status: 'disconnected', icon: '⚡', docsUrl: 'https://zapier.com', apiKey: '', webhookUrl: '', extraConfig: {} },
+  { id: 'make', name: 'Make (Integromat)', description: 'Advanced visual automation between hundreds of apps.', category: 'Automation', connected: false, status: 'disconnected', icon: '🔗', docsUrl: 'https://www.make.com/en/api-documentation', apiKey: '', webhookUrl: '', extraConfig: {} },
 ]
 
 const INITIAL_AUTOMATION: AutomationRule[] = [
