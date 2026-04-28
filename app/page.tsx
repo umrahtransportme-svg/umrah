@@ -11,6 +11,8 @@ import JsonLd from '@/components/seo/JsonLd'
 import { reviewsSchema, homepageFaqSchema, breadcrumbSchema } from '@/lib/seo'
 import { BUSINESS } from '@/lib/config'
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title:
     'Umrah Transport | Premium Pilgrimage Transportation — Makkah, Madinah & Jeddah',

@@ -6,9 +6,8 @@ import {
   Calendar,
   ArrowRight,
 } from 'lucide-react'
-import { BUSINESS } from '@/lib/config'
-import { getWhatsAppUrl } from '@/lib/whatsapp'
-import { WHATSAPP_MESSAGES } from '@/lib/config'
+import { BUSINESS, WHATSAPP_MESSAGES } from '@/lib/config'
+import { prisma } from '@/lib/prisma'
 
 const services = [
   { label: 'Airport Transfers', href: '/services/airport-transfers' },
@@ -29,7 +28,26 @@ const quickLinks = [
 
 const locations = ['Makkah', 'Madinah', 'Jeddah Airport', 'Madinah Airport']
 
-export default function Footer() {
+export default async function Footer() {
+  let phone = BUSINESS.phone
+  let email = BUSINESS.email
+  let address = `${BUSINESS.address.locality}, ${BUSINESS.address.countryName}`
+  let whatsappNumber = BUSINESS.whatsappNumber
+
+  try {
+    const rows = await prisma.setting.findMany({
+      where: { key: { in: ['email', 'whatsappNumber', 'address'] } },
+    })
+    const db = Object.fromEntries(rows.map((r) => [r.key, r.value]))
+    if (db.whatsappNumber) { phone = db.whatsappNumber; whatsappNumber = db.whatsappNumber }
+    if (db.email) email = db.email
+    if (db.address) address = db.address
+  } catch {
+    // fall back to config defaults
+  }
+
+  const waUrl = `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(WHATSAPP_MESSAGES.general)}`
+
   return (
     <footer className="bg-slate-900 text-slate-300">
       {/* Main footer */}
@@ -154,7 +172,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href={getWhatsAppUrl(WHATSAPP_MESSAGES.general)}
+                  href={waUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 group"
@@ -165,14 +183,14 @@ export default function Footer() {
                   <div>
                     <div className="text-xs text-slate-500">WhatsApp (Preferred)</div>
                     <div className="text-sm text-slate-300 group-hover:text-white transition-colors">
-                      {BUSINESS.phone}
+                      {phone}
                     </div>
                   </div>
                 </a>
               </li>
               <li>
                 <a
-                  href={`mailto:${BUSINESS.email}`}
+                  href={`mailto:${email}`}
                   className="flex items-start gap-3 group"
                 >
                   <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
@@ -181,7 +199,7 @@ export default function Footer() {
                   <div>
                     <div className="text-xs text-slate-500">Email</div>
                     <div className="text-sm text-slate-300 group-hover:text-white transition-colors">
-                      {BUSINESS.email}
+                      {email}
                     </div>
                   </div>
                 </a>
@@ -194,7 +212,7 @@ export default function Footer() {
                   <div>
                     <div className="text-xs text-slate-500">Base</div>
                     <div className="text-sm text-slate-300">
-                      {BUSINESS.address.locality}, {BUSINESS.address.countryName}
+                      {address}
                     </div>
                   </div>
                 </div>

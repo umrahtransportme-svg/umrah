@@ -295,9 +295,9 @@ export default function Header() {
                 </AnimatePresence>
               </div>
             ) : (
-              <button onClick={() => signIn('google', { callbackUrl: '/account' })} className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">
+              <Link href="/auth/signin" className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">
                 <User className="w-4 h-4" /> Sign In
-              </button>
+              </Link>
             )}
 
             <Link href="/book" className="btn-primary text-sm px-5 py-2.5 ml-1">Book Now</Link>
@@ -386,9 +386,9 @@ export default function Header() {
                   </div>
                 </div>
               ) : (
-                <button onClick={() => signIn('google', { callbackUrl: '/account' })} className="flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors">
-                  <User className="w-4 h-4" /> Sign In with Google
-                </button>
+                <Link href="/auth/signin" className="flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors">
+                  <User className="w-4 h-4" /> Sign In
+                </Link>
               )}
 
               <div className="flex gap-3 pt-3 pb-2 border-t border-slate-100 mt-3">

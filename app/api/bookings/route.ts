@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { generateBookingRef } from '@/lib/utils'
 import { buildBookingMessage } from '@/lib/whatsapp'
+import { prisma } from '@/lib/prisma'
 
 const bookingSchema = z.object({
   serviceType: z.string().min(1),
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const data = bookingSchema.parse(body)
 
-    const bookingRef = generateBookingRef()
+    const reference = generateBookingRef()
 
     const whatsappMessage = buildBookingMessage({
       service: data.serviceType,
@@ -34,48 +35,45 @@ export async function POST(request: NextRequest) {
       passengers: data.passengers,
       vehicle: data.vehicleType,
       name: data.fullName,
-      bookingRef,
+      bookingRef: reference,
     })
 
     const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000'}?text=${encodeURIComponent(whatsappMessage)}`
 
-    // In production: save to database, send email confirmation etc.
-    const booking = {
-      id: crypto.randomUUID(),
-      bookingRef,
-      ...data,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    }
-
-    console.log('New booking created:', bookingRef)
+    const booking = await prisma.booking.create({
+      data: {
+        reference,
+        serviceType: data.serviceType,
+        pickupLocation: data.pickupLocation,
+        dropoffLocation: data.dropoffLocation,
+        travelDate: data.travelDate,
+        passengers: data.passengers,
+        vehicleType: data.vehicleType,
+        customerName: data.fullName,
+        customerEmail: data.email,
+        customerWhatsapp: data.whatsappNumber,
+        customerCountry: data.country,
+        notes: data.specialRequests,
+        status: 'pending',
+      },
+    })
 
     return NextResponse.json({
       success: true,
-      bookingRef,
+      bookingRef: reference,
       whatsappUrl,
       message: 'Booking received. Please complete via WhatsApp.',
       booking,
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { success: false, errors: error.errors },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, errors: error.errors }, { status: 400 })
     }
-
     console.error('Booking error:', error)
-    return NextResponse.json(
-      { success: false, message: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function GET() {
-  return NextResponse.json(
-    { message: 'Booking API — use POST to create a booking' },
-    { status: 200 }
-  )
+  return NextResponse.json({ message: 'Booking API — use POST to create a booking' })
 }

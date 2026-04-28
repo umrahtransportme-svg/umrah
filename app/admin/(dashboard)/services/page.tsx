@@ -1,11 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plane, Car, MapPin, Star, Heart, Edit2, ToggleLeft, ToggleRight, Plus, Trash2, Wrench, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/lib/admin/utils'
-import { useAdminStore } from '@/lib/admin/store'
-import type { AdminService } from '@/lib/admin/store'
 import AdminModal from '@/components/admin/ui/Modal'
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -21,62 +19,92 @@ const COLOR_OPTIONS = [
   { label: 'Red',    value: 'bg-red-50 text-red-600' },
 ]
 
-const BLANK_SERVICE: Omit<AdminService, 'id'> = {
-  name: '', iconName: 'Wrench', enabled: true, bookings: 0, revenue: 0,
+interface PricingTier { id: string; label: string; price: number }
+interface Service {
+  id: string; name: string; iconName: string; enabled: boolean
+  description: string; pricing: PricingTier[]; colorClass: string
+}
+
+const BLANK: Omit<Service, 'id'> = {
+  name: '', iconName: 'Wrench', enabled: true,
   description: '', pricing: [], colorClass: 'bg-blue-50 text-blue-600',
 }
 
 export default function AdminServicesPage() {
-  const { services, updateService, deleteService, addService } = useAdminStore()
-  const [editService, setEditService] = useState<AdminService | null>(null)
+  const [services, setServices] = useState<Service[]>([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [editService, setEditService] = useState<Service | null>(null)
   const [isNew, setIsNew] = useState(false)
-  const [confirmDelete, setConfirmDelete] = useState<AdminService | null>(null)
-  const [form, setForm] = useState<Omit<AdminService, 'id'>>(BLANK_SERVICE)
+  const [confirmDelete, setConfirmDelete] = useState<Service | null>(null)
+  const [form, setForm] = useState<Omit<Service, 'id'>>(BLANK)
 
-  function openEdit(svc: AdminService) {
-    setForm({ ...svc })
+  async function load() {
+    const res = await fetch('/api/admin/services')
+    if (res.ok) setServices(await res.json())
+    setLoading(false)
+  }
+
+  useEffect(() => { load() }, [])
+
+  function openEdit(svc: Service) {
+    setForm({ name: svc.name, iconName: svc.iconName, enabled: svc.enabled, description: svc.description, pricing: svc.pricing, colorClass: svc.colorClass })
     setIsNew(false)
     setEditService(svc)
   }
 
   function openAdd() {
-    setForm({ ...BLANK_SERVICE })
+    setForm({ ...BLANK })
     setIsNew(true)
-    setEditService({ id: '', ...BLANK_SERVICE })
+    setEditService({ id: '', ...BLANK })
   }
 
-  function closeEdit() {
-    setEditService(null)
-    setIsNew(false)
-  }
+  function closeEdit() { setEditService(null); setIsNew(false) }
 
-  function saveEdit() {
+  async function saveEdit() {
     if (!editService) return
+    setSaving(true)
     if (isNew) {
-      addService(form)
+      const res = await fetch('/api/admin/services', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
+      })
+      if (res.ok) { const svc = await res.json(); setServices((s) => [...s, svc]) }
     } else {
-      updateService(editService.id, form)
+      const res = await fetch(`/api/admin/services/${editService.id}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
+      })
+      if (res.ok) { const svc = await res.json(); setServices((s) => s.map((x) => x.id === svc.id ? svc : x)) }
     }
+    setSaving(false)
     closeEdit()
   }
 
-  function addPriceRow() {
-    setForm((f) => ({
-      ...f,
-      pricing: [...f.pricing, { id: Math.random().toString(36).slice(2), label: '', price: 0 }],
-    }))
+  async function toggleEnabled(svc: Service) {
+    const res = await fetch(`/api/admin/services/${svc.id}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled: !svc.enabled }),
+    })
+    if (res.ok) { const updated = await res.json(); setServices((s) => s.map((x) => x.id === updated.id ? updated : x)) }
   }
 
+  async function doDelete() {
+    if (!confirmDelete) return
+    const res = await fetch(`/api/admin/services/${confirmDelete.id}`, { method: 'DELETE' })
+    if (res.ok) setServices((s) => s.filter((x) => x.id !== confirmDelete.id))
+    setConfirmDelete(null)
+  }
+
+  function addPriceRow() {
+    setForm((f) => ({ ...f, pricing: [...f.pricing, { id: Math.random().toString(36).slice(2), label: '', price: 0 }] }))
+  }
   function removePriceRow(id: string) {
     setForm((f) => ({ ...f, pricing: f.pricing.filter((p) => p.id !== id) }))
   }
-
   function updatePriceRow(id: string, key: 'label' | 'price', value: string | number) {
-    setForm((f) => ({
-      ...f,
-      pricing: f.pricing.map((p) => p.id === id ? { ...p, [key]: value } : p),
-    }))
+    setForm((f) => ({ ...f, pricing: f.pricing.map((p) => p.id === id ? { ...p, [key]: value } : p) }))
   }
+
+  if (loading) return <div className="text-sm text-slate-500 p-4">Loading services…</div>
 
   return (
     <div className="space-y-4">
@@ -102,28 +130,22 @@ export default function AdminServicesPage() {
                     {!service.enabled && <span className="badge bg-slate-100 text-slate-500 text-xs">Disabled</span>}
                   </div>
                   <p className="text-sm text-slate-500 mb-3">{service.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-3">
+                  <div className="flex flex-wrap gap-2">
                     {service.pricing.map((p) => (
                       <span key={p.id} className="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-700">
                         {p.label}: <strong>{formatCurrency(p.price)}</strong>
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-slate-500">
-                    <span><strong className="text-slate-700">{service.bookings}</strong> bookings</span>
-                    <span><strong className="text-slate-700">{formatCurrency(service.revenue)}</strong> revenue</span>
-                  </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <button onClick={() => openEdit(service)}
-                    className="inline-flex items-center gap-1 px-2 py-1.5 text-slate-600 hover:bg-slate-100 text-xs font-medium rounded-lg transition-colors">
+                  <button onClick={() => openEdit(service)} className="inline-flex items-center gap-1 px-2 py-1.5 text-slate-600 hover:bg-slate-100 text-xs font-medium rounded-lg transition-colors">
                     <Edit2 className="w-3.5 h-3.5" />
                   </button>
-                  <button onClick={() => setConfirmDelete(service)}
-                    className="inline-flex items-center gap-1 px-2 py-1.5 text-red-400 hover:bg-red-50 text-xs font-medium rounded-lg transition-colors">
+                  <button onClick={() => setConfirmDelete(service)} className="inline-flex items-center gap-1 px-2 py-1.5 text-red-400 hover:bg-red-50 text-xs font-medium rounded-lg transition-colors">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
-                  <button onClick={() => updateService(service.id, { enabled: !service.enabled })}
+                  <button onClick={() => toggleEnabled(service)}
                     className={cn('flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg transition-colors', service.enabled ? 'text-brand-600 hover:bg-brand-50' : 'text-slate-500 hover:bg-slate-100')}>
                     {service.enabled ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
                     {service.enabled ? 'Enabled' : 'Disabled'}
@@ -135,20 +157,16 @@ export default function AdminServicesPage() {
         })}
       </div>
 
-      {/* Edit / Add modal */}
       {editService && (
-        <AdminModal
-          open={!!editService}
-          onClose={closeEdit}
-          title={isNew ? 'Add Service' : `Edit — ${editService.name}`}
-          size="lg"
+        <AdminModal open={!!editService} onClose={closeEdit} title={isNew ? 'Add Service' : `Edit — ${editService.name}`} size="lg"
           footer={
             <>
               <button onClick={closeEdit} className="inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-700 text-xs font-medium rounded-lg hover:bg-slate-50 transition-colors">Cancel</button>
-              <button onClick={saveEdit} className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium rounded-lg transition-colors">Save Service</button>
+              <button onClick={saveEdit} disabled={saving} className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium rounded-lg transition-colors disabled:opacity-60">
+                {saving ? 'Saving…' : 'Save Service'}
+              </button>
             </>
-          }
-        >
+          }>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -214,13 +232,12 @@ export default function AdminServicesPage() {
         </AdminModal>
       )}
 
-      {/* Delete confirm */}
       {confirmDelete && (
         <AdminModal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="Delete Service" size="sm"
           footer={
             <>
               <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 bg-white border border-slate-200 text-slate-700 text-xs font-medium rounded-lg hover:bg-slate-50 transition-colors">Cancel</button>
-              <button onClick={() => { deleteService(confirmDelete.id); setConfirmDelete(null) }} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors">Delete</button>
+              <button onClick={doDelete} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors">Delete</button>
             </>
           }>
           <p className="text-sm text-slate-600">Are you sure you want to delete <strong>{confirmDelete.name}</strong>? This cannot be undone.</p>
