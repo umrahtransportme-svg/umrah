@@ -10,6 +10,7 @@ import BookingCTA from '@/components/sections/BookingCTA'
 import JsonLd from '@/components/seo/JsonLd'
 import { reviewsSchema, homepageFaqSchema, breadcrumbSchema } from '@/lib/seo'
 import { BUSINESS } from '@/lib/config'
+import { getContent } from '@/lib/content'
 
 export const revalidate = 60
 
@@ -27,7 +28,16 @@ export const metadata: Metadata = {
   },
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [heroContent, statsContent, whyUsContent, howItWorksContent, ctaContent] =
+    await Promise.all([
+      getContent('home', 'hero'),
+      getContent('home', 'stats'),
+      getContent('home', 'why_us'),
+      getContent('home', 'how_it_works'),
+      getContent('home', 'booking_cta'),
+    ])
+
   return (
     <>
       <JsonLd data={reviewsSchema} />
@@ -35,14 +45,14 @@ export default function HomePage() {
         data={breadcrumbSchema([{ name: 'Home', url: BUSINESS.url }])}
       />
       <JsonLd data={homepageFaqSchema} />
-      <Hero />
+      <Hero content={heroContent} />
       <ServicesSection />
-      <Stats />
-      <WhyChooseUs />
-      <HowItWorks />
+      <Stats content={statsContent} />
+      <WhyChooseUs content={whyUsContent} />
+      <HowItWorks content={howItWorksContent} />
       <SpecialServicesSection />
       <Testimonials />
-      <BookingCTA />
+      <BookingCTA content={ctaContent} />
     </>
   )
 }

@@ -11,6 +11,9 @@ import {
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { StaggerContainer, StaggerItem } from '@/components/ui/AnimatedSection'
 import BookingCTA from '@/components/sections/BookingCTA'
+import { getContent } from '@/lib/content'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'About Umrah Transport | UK-Based Pilgrimage Transport Specialists',
@@ -71,7 +74,13 @@ const team = [
   },
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [heroContent, storyContent, ctaContent] = await Promise.all([
+    getContent('about', 'hero'),
+    getContent('about', 'story'),
+    getContent('home', 'booking_cta'),
+  ])
+
   return (
     <div className="pt-16">
       {/* Hero */}
@@ -81,20 +90,14 @@ export default function AboutPage() {
             <AnimatedSection>
               <span className="section-tag mb-4">About Us</span>
               <h1 className="section-heading mb-5">
-                Serving pilgrims with{' '}
-                <span className="text-gradient">heart and purpose</span>
+                {heroContent.heading ?? 'Serving pilgrims with'}{' '}
+                <span className="text-gradient">{heroContent.heading_highlight ?? 'heart and purpose'}</span>
               </h1>
               <p className="text-slate-500 text-lg leading-relaxed mb-6">
-                Hajj Umrah Rentals was founded with a simple but powerful
-                mission: to make the transportation aspect of Umrah
-                stress-free, comfortable and deeply professional for Muslim
-                families from around the world.
+                {heroContent.para1 ?? 'Hajj Umrah Rentals was founded with a simple but powerful mission: to make the transportation aspect of Umrah stress-free, comfortable and deeply professional for Muslim families from around the world.'}
               </p>
               <p className="text-slate-500 leading-relaxed mb-8">
-                We understand what it means to travel for worship. Every
-                booking is handled with the understanding that this may be
-                the most important journey of your life — and we take that
-                responsibility seriously.
+                {heroContent.para2 ?? 'We understand what it means to travel for worship. Every booking is handled with the understanding that this may be the most important journey of your life — and we take that responsibility seriously.'}
               </p>
               <div className="flex gap-3">
                 <Link href="/book" className="btn-primary">
@@ -141,30 +144,12 @@ export default function AboutPage() {
             <AnimatedSection>
               <span className="section-tag mb-4">Our Story</span>
               <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
-                Why we started Hajj Umrah Rentals
+                {storyContent.heading ?? 'Why we started Hajj Umrah Rentals'}
               </h2>
               <div className="space-y-4 text-slate-500 leading-relaxed text-left">
-                <p>
-                  Our founder, Abdullah Rahman, made his first Umrah from the
-                  UK in 2012. The experience was transformative — but the
-                  transport was a constant source of stress. Unreliable drivers,
-                  no-shows, vehicles that were not fit for families with
-                  children, and language barriers made an already exhausting
-                  trip even harder.
-                </p>
-                <p>
-                  Having spoken to hundreds of pilgrims from the UK, USA,
-                  Canada and Australia who shared the same frustrations, Abdullah
-                  decided to build the service he always wished existed. In 2018,
-                  Hajj Umrah Rentals was born — a company built by pilgrims,
-                  for pilgrims.
-                </p>
-                <p>
-                  Today, we serve thousands of families every year, with a
-                  team of professional, English-speaking drivers and a
-                  WhatsApp-first support system that means help is always
-                  just one message away.
-                </p>
+                <p>{storyContent.para1 ?? 'Our founder, Abdullah Rahman, made his first Umrah from the UK in 2012. The experience was transformative — but the transport was a constant source of stress. Unreliable drivers, no-shows, vehicles that were not fit for families with children, and language barriers made an already exhausting trip even harder.'}</p>
+                <p>{storyContent.para2 ?? 'Having spoken to hundreds of pilgrims from the UK, USA, Canada and Australia who shared the same frustrations, Abdullah decided to build the service he always wished existed. In 2018, Hajj Umrah Rentals was born — a company built by pilgrims, for pilgrims.'}</p>
+                <p>{storyContent.para3 ?? 'Today, we serve thousands of families every year, with a team of professional, English-speaking drivers and a WhatsApp-first support system that means help is always just one message away.'}</p>
               </div>
             </AnimatedSection>
           </div>
@@ -278,7 +263,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <BookingCTA />
+      <BookingCTA content={ctaContent} />
     </div>
   )
 }

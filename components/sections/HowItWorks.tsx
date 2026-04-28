@@ -2,47 +2,31 @@ import { ClipboardList, MessageCircle, Car, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { StaggerContainer, StaggerItem } from '@/components/ui/AnimatedSection'
+import type { ContentMap } from '@/lib/content'
 
-const steps = [
-  {
-    step: '01',
-    icon: ClipboardList,
-    title: 'Choose Your Service',
-    description:
-      'Select from our range of services — airport transfer, intercity travel, Ziyarat tour or guided Umrah. Fill in your journey details in minutes.',
-    color: 'bg-brand-600',
-  },
-  {
-    step: '02',
-    icon: MessageCircle,
-    title: 'Instant Confirmation',
-    description:
-      'Receive immediate booking confirmation via WhatsApp and email. Our team reviews your booking and confirms availability within minutes.',
-    color: 'bg-brand-700',
-  },
-  {
-    step: '03',
-    icon: Car,
-    title: 'Enjoy Your Journey',
-    description:
-      'Your professional driver will be there on time, ready to provide a safe and comfortable journey to your destination.',
-    color: 'bg-brand-800',
-  },
-]
+export default function HowItWorks({ content = {} }: { content?: ContentMap }) {
+  const heading = content.heading ?? 'Book your transfer in'
+  const heading_highlight = content.heading_highlight ?? '3 simple steps'
+  const subheading = content.subheading ?? 'We have made booking as easy as possible so you can focus on what matters — your pilgrimage.'
+  const cta_label = content.cta_label ?? 'Start Your Booking'
 
-export default function HowItWorks() {
+  const steps = [
+    { step: '01', icon: ClipboardList, title: content.step1_title ?? 'Choose Your Service', description: content.step1_desc ?? 'Select from our range of services — airport transfer, intercity travel, Ziyarat tour or guided Umrah. Fill in your journey details in minutes.', color: 'bg-brand-600' },
+    { step: '02', icon: MessageCircle, title: content.step2_title ?? 'Instant Confirmation', description: content.step2_desc ?? 'Receive immediate booking confirmation via WhatsApp and email. Our team reviews your booking and confirms availability within minutes.', color: 'bg-brand-700' },
+    { step: '03', icon: Car, title: content.step3_title ?? 'Enjoy Your Journey', description: content.step3_desc ?? 'Your professional driver will be there on time, ready to provide a safe and comfortable journey to your destination.', color: 'bg-brand-800' },
+  ]
+
   return (
     <section className="section-padding bg-white">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-14">
           <span className="section-tag mb-4">How It Works</span>
           <h2 className="section-heading">
-            Book your transfer in{' '}
-            <span className="text-gradient">3 simple steps</span>
+            {heading}{' '}
+            <span className="text-gradient">{heading_highlight}</span>
           </h2>
           <p className="section-subheading max-w-xl mx-auto">
-            We have made booking as easy as possible so you can focus on what
-            matters — your pilgrimage.
+            {subheading}
           </p>
         </AnimatedSection>
 
@@ -83,7 +67,7 @@ export default function HowItWorks() {
             href="/book"
             className="btn-primary text-base px-8 py-4 rounded-2xl"
           >
-            Start Your Booking
+            {cta_label}
             <ArrowRight className="w-5 h-5" />
           </Link>
         </AnimatedSection>

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { WHATSAPP_MESSAGES } from '@/lib/config'
+import type { ContentMap } from '@/lib/content'
 
 const trustBadges = [
   { icon: Star, text: '4.9/5 Rating', sub: '500+ reviews' },
@@ -46,7 +47,15 @@ const itemVariants = {
   },
 }
 
-export default function Hero() {
+export default function Hero({ content = {} }: { content?: ContentMap }) {
+  const badge = content.badge ?? 'Trusted by UK & US families since 2018'
+  const title1 = content.title1 ?? 'Your Trusted'
+  const title2 = content.title2 ?? 'Transport Partner'
+  const title3 = content.title3 ?? 'for Umrah'
+  const subtitle = content.subtitle ?? 'Premium, reliable transportation for every pilgrim. From airport arrivals to sacred Ziyarat tours — we handle every journey with care and professionalism.'
+  const cta_primary = content.cta_primary ?? 'Book Your Transfer'
+  const cta_secondary = content.cta_secondary ?? 'WhatsApp Us'
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-hero pt-16">
       {/* Background decorative elements */}
@@ -67,7 +76,7 @@ export default function Hero() {
             <motion.div variants={itemVariants} className="inline-flex mb-6">
               <span className="section-tag">
                 <Star className="w-3.5 h-3.5 text-brand-600 fill-brand-500" />
-                Trusted by UK & US families since 2018
+                {badge}
               </span>
             </motion.div>
 
@@ -76,10 +85,10 @@ export default function Hero() {
               variants={itemVariants}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.1] mb-5"
             >
-              Your Trusted{' '}
-              <span className="block mt-1">Transport Partner</span>
+              {title1}{' '}
+              <span className="block mt-1">{title2}</span>
               <span className="block text-gradient mt-1">
-                for Umrah{' '}
+                {title3}{' '}
                 <span className="font-arabic" style={{ fontFamily: 'serif' }}>
                   سفر
                 </span>
@@ -91,9 +100,7 @@ export default function Hero() {
               variants={itemVariants}
               className="text-lg text-slate-500 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
             >
-              Premium, reliable transportation for every pilgrim. From airport
-              arrivals to sacred Ziyarat tours — we handle every journey with
-              care and professionalism.
+              {subtitle}
             </motion.p>
 
             {/* CTAs */}
@@ -102,7 +109,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-10"
             >
               <Link href="/book" className="btn-primary text-base px-8 py-4 rounded-2xl">
-                Book Your Transfer
+                {cta_primary}
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <a
@@ -112,7 +119,7 @@ export default function Hero() {
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white border border-slate-200 hover:border-brand-200 text-slate-700 hover:text-brand-600 font-semibold text-base transition-all duration-200 shadow-sm hover:shadow-card"
               >
                 <MessageCircle className="w-5 h-5" />
-                WhatsApp Us
+                {cta_secondary}
               </a>
             </motion.div>
 

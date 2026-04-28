@@ -7,6 +7,9 @@ import { breadcrumbSchema } from '@/lib/seo'
 import { BUSINESS } from '@/lib/config'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { WHATSAPP_MESSAGES } from '@/lib/config'
+import { getContent } from '@/lib/content'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Umrah Transport FAQ | Common Questions Answered',
@@ -173,7 +176,9 @@ const fullFaqSchema = {
   ),
 }
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const heroContent = await getContent('faq', 'hero')
+
   return (
     <>
       <JsonLd data={fullFaqSchema} />
@@ -191,13 +196,11 @@ export default function FaqPage() {
             <AnimatedSection>
               <span className="section-tag mb-4">FAQ</span>
               <h1 className="section-heading mb-4">
-                Frequently asked{' '}
-                <span className="text-gradient">questions</span>
+                {heroContent.heading ?? 'Frequently asked'}{' '}
+                <span className="text-gradient">{heroContent.heading_highlight ?? 'questions'}</span>
               </h1>
               <p className="section-subheading max-w-2xl mx-auto">
-                Everything you need to know about booking Umrah transport
-                with us. Can&apos;t find your answer? Chat with us on WhatsApp
-                — we reply within minutes.
+                {heroContent.subheading ?? "Everything you need to know about booking Umrah transport with us. Can't find your answer? Chat with us on WhatsApp — we reply within minutes."}
               </p>
             </AnimatedSection>
           </div>

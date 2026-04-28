@@ -6,6 +6,54 @@ datasource db {
   provider = "postgresql"
 }
 
+model ContentBlock {
+  id        String   @id @default(cuid())
+  page      String
+  section   String
+  key       String
+  value     String   @db.Text
+  type      String   @default("text")
+  label     String   @default("")
+  sortOrder Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([page, section, key])
+  @@map("content_blocks")
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  name        String?
+  image       String?
+  googleId    String?   @unique
+  phone       String?
+  nationality String?
+  dateOfBirth String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  passport    PassportDetail?
+  bookings    Booking[]
+
+  @@map("users")
+}
+
+model PassportDetail {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName       String   @default("")
+  passportNumber String   @default("")
+  nationality    String   @default("")
+  dateOfBirth    String   @default("")
+  issueDate      String   @default("")
+  expiryDate     String   @default("")
+  updatedAt      DateTime @updatedAt
+
+  @@map("passport_details")
+}
+
 model Service {
   id          String   @id @default(cuid())
   name        String
@@ -45,6 +93,8 @@ model Booking {
   totalAmount      Float    @default(0)
   driverId         String?
   notes            String?
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id])
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

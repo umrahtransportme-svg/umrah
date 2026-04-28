@@ -3,13 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInView } from 'framer-motion'
 import AnimatedSection from '@/components/ui/AnimatedSection'
-
-const stats = [
-  { value: 1000, suffix: '+', label: 'Pilgrims Served', sublabel: 'Since 2018' },
-  { value: 6, suffix: '+', label: 'Years Experience', sublabel: 'Trusted service' },
-  { value: 4.9, suffix: '★', label: 'Average Rating', sublabel: '500+ reviews' },
-  { value: 24, suffix: '/7', label: 'Support Available', sublabel: 'Always reachable' },
-]
+import type { ContentMap } from '@/lib/content'
 
 function CountUp({
   target,
@@ -50,7 +44,34 @@ function CountUp({
   )
 }
 
-export default function Stats() {
+export default function Stats({ content = {} }: { content?: ContentMap }) {
+  const stats = [
+    {
+      value: parseFloat(content.stat1_value ?? '1000'),
+      suffix: content.stat1_suffix ?? '+',
+      label: content.stat1_label ?? 'Pilgrims Served',
+      sublabel: content.stat1_sub ?? 'Since 2018',
+    },
+    {
+      value: parseFloat(content.stat2_value ?? '6'),
+      suffix: content.stat2_suffix ?? '+',
+      label: content.stat2_label ?? 'Years Experience',
+      sublabel: content.stat2_sub ?? 'Trusted service',
+    },
+    {
+      value: parseFloat(content.stat3_value ?? '4.9'),
+      suffix: content.stat3_suffix ?? '★',
+      label: content.stat3_label ?? 'Average Rating',
+      sublabel: content.stat3_sub ?? '500+ reviews',
+    },
+    {
+      value: parseFloat(content.stat4_value ?? '24'),
+      suffix: content.stat4_suffix ?? '/7',
+      label: content.stat4_label ?? 'Support Available',
+      sublabel: content.stat4_sub ?? 'Always reachable',
+    },
+  ]
+
   return (
     <section className="py-14 bg-brand-700">
       <div className="container-custom">

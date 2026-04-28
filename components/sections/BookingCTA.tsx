@@ -3,8 +3,15 @@ import { ArrowRight, MessageCircle, Phone } from 'lucide-react'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { WHATSAPP_MESSAGES, BUSINESS } from '@/lib/config'
+import type { ContentMap } from '@/lib/content'
 
-export default function BookingCTA() {
+export default function BookingCTA({ content = {} }: { content?: ContentMap }) {
+  const heading = content.heading ?? 'Ready to book your'
+  const heading_highlight = content.heading_highlight ?? 'Umrah transport?'
+  const subheading = content.subheading ?? 'Join over 1,000 pilgrims who trust us for their sacred journeys. Book online in minutes or chat with our team on WhatsApp for a personalised quote.'
+  const cta_primary = content.cta_primary ?? 'Book Online Now'
+  const cta_secondary = content.cta_secondary ?? 'Chat on WhatsApp'
+
   return (
     <section className="section-padding bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 relative overflow-hidden">
       {/* Decorative */}
@@ -15,13 +22,11 @@ export default function BookingCTA() {
       <div className="container-custom relative z-10">
         <AnimatedSection className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-5">
-            Ready to book your{' '}
-            <span className="text-brand-200">Umrah transport?</span>
+            {heading}{' '}
+            <span className="text-brand-200">{heading_highlight}</span>
           </h2>
           <p className="text-brand-100 text-lg leading-relaxed mb-10">
-            Join over 1,000 pilgrims who trust us for their sacred journeys.
-            Book online in minutes or chat with our team on WhatsApp for a
-            personalised quote.
+            {subheading}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
@@ -29,7 +34,7 @@ export default function BookingCTA() {
               href="/book"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-brand-700 font-bold text-base rounded-2xl hover:bg-brand-50 transition-all duration-200 shadow-lg"
             >
-              Book Online Now
+              {cta_primary}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <a
@@ -39,7 +44,7 @@ export default function BookingCTA() {
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold text-base rounded-2xl border border-white/20 transition-all duration-200"
             >
               <MessageCircle className="w-5 h-5" />
-              Chat on WhatsApp
+              {cta_secondary}
             </a>
           </div>
 
