@@ -22,7 +22,7 @@ function isConfigured() {
 function baseTemplate(title: string, body: string) {
   return `
     <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
-      <div style="background:#1b3a6b;padding:24px;text-align:center;border-radius:8px 8px 0 0;">
+      <div style="background:#1e3a8a;padding:24px;text-align:center;border-radius:8px 8px 0 0;">
         <h1 style="color:#fff;margin:0;font-size:22px;">🕌 Umrah Transport</h1>
         <p style="color:#aac4e8;margin:6px 0 0;font-size:14px;">${title}</p>
       </div>
@@ -31,7 +31,7 @@ function baseTemplate(title: string, body: string) {
         <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">
         <p style="color:#94a3b8;font-size:12px;text-align:center;margin:0;">
           Umrah Transport · Making your blessed journey easy<br>
-          <a href="${SITE_URL}" style="color:#1b3a6b;">www.umrahtransport.me</a>
+          <a href="${SITE_URL}" style="color:#1e3a8a;">www.umrahtransport.me</a>
         </p>
       </div>
     </div>`
@@ -50,7 +50,7 @@ function table(rows: [string, string][]) {
 
 function btn(text: string, href: string) {
   return `<div style="text-align:center;margin:24px 0;">
-    <a href="${href}" style="background:#1b3a6b;color:#fff;padding:12px 32px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:15px;">${text}</a>
+    <a href="${href}" style="background:#1e3a8a;color:#fff;padding:12px 32px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:15px;">${text}</a>
   </div>`
 }
 
@@ -71,14 +71,14 @@ export async function sendBookingConfirmation(data: {
 }) {
   if (!isConfigured()) return
   const body = `
-    <p style="font-size:17px;color:#1b3a6b;font-weight:bold;margin:0 0 8px;">
+    <p style="font-size:17px;color:#1e3a8a;font-weight:bold;margin:0 0 8px;">
       Assalamu Alaikum, ${data.customerName} 🤲
     </p>
     <p style="color:#475569;margin:0 0 20px;">
       Your booking is <strong>confirmed</strong>. JazakAllah Khair for choosing us for your blessed journey.
     </p>
     ${table([
-      ['Reference', `<strong style="color:#1b3a6b;">${data.bookingRef}</strong>`],
+      ['Reference', `<strong style="color:#1e3a8a;">${data.bookingRef}</strong>`],
       ['Service', data.serviceType],
       ['From', data.pickupLocation],
       ['To', data.dropoffLocation],
@@ -114,7 +114,7 @@ export async function sendDriverAssignedToCustomer(data: {
 }) {
   if (!isConfigured()) return
   const body = `
-    <p style="font-size:17px;color:#1b3a6b;font-weight:bold;margin:0 0 8px;">
+    <p style="font-size:17px;color:#1e3a8a;font-weight:bold;margin:0 0 8px;">
       Assalamu Alaikum, ${data.customerName}!
     </p>
     <p style="color:#475569;margin:0 0 20px;">
@@ -173,7 +173,7 @@ export async function sendDriverJobNotification(data: {
   if (data.notes) rows.push(['Notes', data.notes])
 
   const body = `
-    <p style="font-size:17px;color:#1b3a6b;font-weight:bold;margin:0 0 8px;">
+    <p style="font-size:17px;color:#1e3a8a;font-weight:bold;margin:0 0 8px;">
       Dear ${data.driverName},
     </p>
     <p style="color:#475569;margin:0 0 20px;">
@@ -201,7 +201,7 @@ export async function sendVendorApproval(data: {
 }) {
   if (!isConfigured()) return
   const body = `
-    <p style="font-size:17px;color:#1b3a6b;font-weight:bold;margin:0 0 8px;">
+    <p style="font-size:17px;color:#1e3a8a;font-weight:bold;margin:0 0 8px;">
       Assalamu Alaikum, ${data.companyName}!
     </p>
     <p style="color:#475569;margin:0 0 20px;">
