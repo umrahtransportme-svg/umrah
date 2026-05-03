@@ -51,7 +51,7 @@ export async function notifyCustomerBookingConfirmed(data: {
   pickupLocation: string
   totalAmount: number
 }) {
-  const msg = `🕌 *Booking Confirmed — Hajj Umrah Rentals*
+  const msg = `🕌 *Booking Confirmed — Umrah Transport*
 
 Assalamu Alaikum ${data.customerName} 🤲
 
@@ -65,7 +65,7 @@ Your booking is *confirmed* and payment received!
 
 Your driver details will be sent shortly. Barakallahu Feekum! 🕋
 
-_— Hajj Umrah Rentals_`
+_— Umrah Transport_`
 
   await sendText(data.customerPhone, msg)
 }
@@ -96,7 +96,7 @@ Your driver has been assigned:
 
 Please save your driver's number and contact them for any coordination on arrival.
 
-_— Hajj Umrah Rentals_`
+_— Umrah Transport_`
 
   await sendText(data.customerPhone, msg)
 }
@@ -117,7 +117,7 @@ export async function notifyDriverJobAssigned(data: {
   passengers: number
   notes?: string
 }) {
-  const msg = `🚗 *New Job Assigned — Hajj Umrah Rentals*
+  const msg = `🚗 *New Job Assigned — Umrah Transport*
 
 Dear ${data.driverName},
 

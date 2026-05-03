@@ -16,7 +16,7 @@ export function buildBookingMessage(data: {
   name: string
   bookingRef: string
 }): string {
-  return `🕌 *New Booking Request - Hajj Umrah Rentals*
+  return `🕌 *New Booking Request - Umrah Transport*
 
 📋 *Booking Reference:* ${data.bookingRef}
 

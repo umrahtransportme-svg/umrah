@@ -1,4 +1,4 @@
-# Hajj Umrah Rentals — Setup Guide
+# Umrah Transport — Setup Guide
 
 ## Quick Start
 

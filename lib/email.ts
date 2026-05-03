@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.umrahtransport.me'
-const FROM = process.env.SMTP_FROM || 'Hajj Umrah Rentals <noreply@hajjumrahrentals.com>'
+const FROM = process.env.SMTP_FROM || 'Umrah Transport <noreply@umrahtransport.me>'
 
 function getTransporter() {
   return nodemailer.createTransport({
@@ -23,14 +23,14 @@ function baseTemplate(title: string, body: string) {
   return `
     <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
       <div style="background:#1b3a6b;padding:24px;text-align:center;border-radius:8px 8px 0 0;">
-        <h1 style="color:#fff;margin:0;font-size:22px;">🕌 Hajj Umrah Rentals</h1>
+        <h1 style="color:#fff;margin:0;font-size:22px;">🕌 Umrah Transport</h1>
         <p style="color:#aac4e8;margin:6px 0 0;font-size:14px;">${title}</p>
       </div>
       <div style="padding:30px;background:#f8fafc;border-radius:0 0 8px 8px;">
         ${body}
         <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">
         <p style="color:#94a3b8;font-size:12px;text-align:center;margin:0;">
-          Hajj Umrah Rentals · Making your blessed journey easy<br>
+          Umrah Transport · Making your blessed journey easy<br>
           <a href="${SITE_URL}" style="color:#1b3a6b;">www.umrahtransport.me</a>
         </p>
       </div>
@@ -95,7 +95,7 @@ export async function sendBookingConfirmation(data: {
   await getTransporter().sendMail({
     from: FROM,
     to: data.customerEmail,
-    subject: `✅ Booking Confirmed — ${data.bookingRef} | Hajj Umrah Rentals`,
+    subject: `✅ Booking Confirmed — ${data.bookingRef} | Umrah Transport`,
     html: baseTemplate('Booking Confirmation', body),
   })
 }
@@ -138,7 +138,7 @@ export async function sendDriverAssignedToCustomer(data: {
   await getTransporter().sendMail({
     from: FROM,
     to: data.customerEmail,
-    subject: `🚗 Driver Assigned — ${data.bookingRef} | Hajj Umrah Rentals`,
+    subject: `🚗 Driver Assigned — ${data.bookingRef} | Umrah Transport`,
     html: baseTemplate('Driver Assigned', body),
   })
 }
@@ -187,7 +187,7 @@ export async function sendDriverJobNotification(data: {
   await getTransporter().sendMail({
     from: FROM,
     to: data.driverEmail,
-    subject: `🚗 New Job — ${data.bookingRef} | Hajj Umrah Rentals`,
+    subject: `🚗 New Job — ${data.bookingRef} | Umrah Transport`,
     html: baseTemplate('New Job Assigned', body),
   })
 }
@@ -212,7 +212,7 @@ export async function sendVendorApproval(data: {
   await getTransporter().sendMail({
     from: FROM,
     to: data.vendorEmail,
-    subject: `✅ Vendor Account Approved | Hajj Umrah Rentals`,
+    subject: `✅ Vendor Account Approved | Umrah Transport`,
     html: baseTemplate('Account Approved', body),
   })
 }
