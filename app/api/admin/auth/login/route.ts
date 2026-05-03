@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { signAdminToken, ADMIN_CREDENTIALS } from '@/lib/admin/auth'
+import { checkRateLimit } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+  if (!checkRateLimit(`admin-login:${ip}`, 5, 60_000)) {
+    return NextResponse.json(
+      { error: 'Too many login attempts. Please try again in a minute.' },
+      { status: 429 }
+    )
+  }
+
   const body = await req.json().catch(() => ({}))
   const { email, password } = body
 

@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose'
-import { createHash } from 'crypto'
+import bcrypt from 'bcryptjs'
 
 const SECRET = new TextEncoder().encode(
   process.env.VENDOR_JWT_SECRET || 'umratransport-vendor-secret-key-2025'
@@ -29,9 +29,9 @@ export async function verifyVendorToken(token: string): Promise<VendorJWTPayload
 }
 
 export function hashPassword(password: string): string {
-  return createHash('sha256').update(password + 'vendor-salt-umrah-2025').digest('hex')
+  return bcrypt.hashSync(password, 12)
 }
 
 export function verifyPassword(password: string, hash: string): boolean {
-  return hashPassword(password) === hash
+  return bcrypt.compareSync(password, hash)
 }

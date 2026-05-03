@@ -153,10 +153,13 @@ export async function POST(req: NextRequest) {
   // Add new columns to existing tables
   await run('users.profilePicture', () => sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "profilePicture" TEXT`)
   await run('users.referralCode',   () => sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "referralCode" TEXT UNIQUE`)
-  await run('bookings.vendorId',    () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "vendorId" TEXT REFERENCES vendor_accounts(id)`)
-  await run('bookings.vendorAmount',() => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "vendorAmount" DOUBLE PRECISION NOT NULL DEFAULT 0`)
-  await run('bookings.refunded',    () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS refunded BOOLEAN NOT NULL DEFAULT false`)
-  await run('bookings.refundAmount',() => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "refundAmount" DOUBLE PRECISION NOT NULL DEFAULT 0`)
+  await run('bookings.vendorId',              () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "vendorId" TEXT REFERENCES vendor_accounts(id)`)
+  await run('bookings.vendorAmount',           () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "vendorAmount" DOUBLE PRECISION NOT NULL DEFAULT 0`)
+  await run('bookings.refunded',               () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS refunded BOOLEAN NOT NULL DEFAULT false`)
+  await run('bookings.refundAmount',           () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "refundAmount" DOUBLE PRECISION NOT NULL DEFAULT 0`)
+  await run('bookings.stripeSessionId',        () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "stripeSessionId" TEXT`)
+  await run('bookings.stripePaymentIntentId',  () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "stripePaymentIntentId" TEXT`)
+  await run('bookings.paidAt',                 () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "paidAt" TIMESTAMPTZ`)
 
   return NextResponse.json({ results })
 }

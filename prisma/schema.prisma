@@ -101,12 +101,15 @@ model Booking {
   notes            String?
   userId           String?
   vendorId         String?
-  refunded         Boolean         @default(false)
-  refundAmount     Float           @default(0)
-  user             User?           @relation(fields: [userId], references: [id])
-  vendor           VendorAccount?  @relation(fields: [vendorId], references: [id])
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  refunded                Boolean         @default(false)
+  refundAmount            Float           @default(0)
+  stripeSessionId         String?
+  stripePaymentIntentId   String?
+  paidAt                  DateTime?
+  user                    User?           @relation(fields: [userId], references: [id])
+  vendor                  VendorAccount?  @relation(fields: [vendorId], references: [id])
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
 
   @@map("bookings")
 }
