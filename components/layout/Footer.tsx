@@ -3,9 +3,9 @@ import {
   Mail,
   MapPin,
   MessageCircle,
-  Calendar,
   ArrowRight,
 } from 'lucide-react'
+import { Logo } from '@/components/ui/Logo'
 import { BUSINESS, WHATSAPP_MESSAGES } from '@/lib/config'
 import { prisma } from '@/lib/prisma'
 
@@ -55,18 +55,8 @@ export default async function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-white" />
-              </div>
-              <div className="leading-none">
-                <div className="font-bold text-white text-sm leading-none">
-                  Umrah
-                </div>
-                <div className="text-brand-400 text-xs font-semibold leading-none mt-0.5">
-                  Transport
-                </div>
-              </div>
+            <Link href="/" className="inline-block mb-4">
+              <Logo variant="light" size="sm" />
             </Link>
 
             <p className="text-sm text-slate-400 leading-relaxed mb-5">
@@ -231,7 +221,7 @@ export default async function Footer() {
       <div className="border-t border-slate-800">
         <div className="container-custom py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-slate-500 text-center sm:text-left">
-            © {new Date().getFullYear()} Umrah Transport. All rights reserved.
+            © {new Date().getFullYear()} Hajj Umrah Rentals. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link

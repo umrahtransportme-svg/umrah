@@ -7,9 +7,10 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Menu, X, ChevronDown, Plane, Car, MapPin, Star, Heart,
-  MessageCircle, Calendar, ShoppingCart, User, LogOut, Gauge,
+  MessageCircle, ShoppingCart, User, LogOut, Gauge,
   DollarSign, Check,
 } from 'lucide-react'
+import { Logo } from '@/components/ui/Logo'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
@@ -180,14 +181,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-18">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center shadow-brand transition-transform duration-200 group-hover:scale-105">
-              <Calendar className="w-5 h-5 text-white" />
-            </div>
-            <div className="leading-none">
-              <div className="font-bold text-slate-900 text-sm leading-none">Umrah</div>
-              <div className="text-brand-600 text-xs font-semibold leading-none mt-0.5">Transport</div>
-            </div>
+          <Link href="/" className="flex-shrink-0 transition-transform duration-200 hover:scale-105">
+            <Logo variant="dark" size="sm" />
           </Link>
 
           {/* Desktop Nav */}
