@@ -80,7 +80,7 @@ async function main() {
     { key: 'legalName', value: 'Umra Transport Ltd' },
     { key: 'domain', value: 'www.umrahtransport.me' },
     { key: 'founded', value: '2018' },
-    { key: 'whatsappNumber', value: '+44 7700 000000' },
+    { key: 'whatsappNumber', value: '+44 7456 938750' },
     { key: 'email', value: 'info@umrahtransport.me' },
     { key: 'address', value: 'London, United Kingdom' },
     { key: 'primaryColor', value: '#2563eb' },

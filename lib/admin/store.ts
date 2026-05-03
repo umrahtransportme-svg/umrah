@@ -81,7 +81,7 @@ const INITIAL_SETTINGS: AdminSettings = {
   legalName: 'Umra Transport Ltd',
   domain: 'www.umrahtransport.me',
   founded: '2018',
-  whatsappNumber: '+44 7700 000000',
+  whatsappNumber: '+44 7456 938750',
   email: 'info@umrahtransport.me',
   address: 'London, United Kingdom',
   primaryColor: '#2563eb',

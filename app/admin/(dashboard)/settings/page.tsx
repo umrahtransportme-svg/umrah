@@ -153,7 +153,7 @@ export default function AdminSettingsPage() {
               <Field label="WhatsApp Display Number">
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input type="text" value={form.whatsappNumber} onChange={(e) => set('whatsappNumber', e.target.value)} className="input pl-9 text-sm" placeholder="+44 7700 000000" />
+                  <input type="text" value={form.whatsappNumber} onChange={(e) => set('whatsappNumber', e.target.value)} className="input pl-9 text-sm" placeholder="+44 7456 938750" />
                 </div>
               </Field>
               <Field label="Email Address">
@@ -293,7 +293,7 @@ export default function AdminSettingsPage() {
             <Field label="Display Phone Number (shown to customers)">
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input type="text" value={form.whatsappNumber} onChange={(e) => set('whatsappNumber', e.target.value)} className="input pl-9 text-sm" placeholder="+44 7700 000000" />
+                <input type="text" value={form.whatsappNumber} onChange={(e) => set('whatsappNumber', e.target.value)} className="input pl-9 text-sm" placeholder="+44 7456 938750" />
               </div>
             </Field>
           </div>

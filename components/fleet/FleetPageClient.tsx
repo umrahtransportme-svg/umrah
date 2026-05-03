@@ -225,7 +225,7 @@ export default function FleetPageClient() {
               Book Online
             </Link>
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000'}?text=Hi%2C%20I%27d%20like%20help%20choosing%20a%20vehicle%20for%20my%20Umrah%20trip`}
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447456938750'}?text=Hi%2C%20I%27d%20like%20help%20choosing%20a%20vehicle%20for%20my%20Umrah%20trip`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3 bg-brand-500/30 hover:bg-brand-500/50 text-white font-bold rounded-xl border border-white/20 transition-colors"

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       bookingRef: reference,
     })
 
-    const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000'}?text=${encodeURIComponent(whatsappMessage)}`
+    const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447456938750'}?text=${encodeURIComponent(whatsappMessage)}`
 
     const booking = await prisma.booking.create({
       data: {

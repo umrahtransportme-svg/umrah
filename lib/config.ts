@@ -6,8 +6,8 @@ export const BUSINESS = {
     'Umrah Transport provides premium, reliable transportation services for Muslim pilgrims performing Umrah. We serve families from the UK, USA, Canada and Australia with airport transfers, intercity travel, Ziyarat tours and guided Umrah in Makkah, Madinah and Jeddah.',
   url: 'https://www.umrahtransport.me',
   domain: 'umrahtransport.me',
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000',
-  phone: process.env.NEXT_PUBLIC_BUSINESS_PHONE || '+44 7700 000000',
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447456938750',
+  phone: process.env.NEXT_PUBLIC_BUSINESS_PHONE || '+44 7456 938750',
   email: process.env.NEXT_PUBLIC_BUSINESS_EMAIL || 'info@umrahtransport.me',
   address: {
     locality: 'London',

@@ -286,7 +286,7 @@ export default function CartDrawer({ open, onClose, onOpenService }: Props) {
             </div>
 
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000'}?text=Hi%2C%20I%20need%20help%20with%20my%20booking`}
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447456938750'}?text=Hi%2C%20I%20need%20help%20with%20my%20booking`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary w-full justify-center py-2.5 text-sm"

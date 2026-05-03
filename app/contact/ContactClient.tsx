@@ -231,7 +231,7 @@ export default function ContactClient({ phone, email, address, whatsappNumber }:
                                 whatsapp: e.target.value,
                               })
                             }
-                            placeholder="+44 7700 000000"
+                            placeholder="+44 7456 938750"
                             className="input-field"
                           />
                         </div>

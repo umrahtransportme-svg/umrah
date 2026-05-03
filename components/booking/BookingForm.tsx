@@ -300,7 +300,7 @@ export default function BookingForm() {
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000'}`}
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447456938750'}`}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"
@@ -688,7 +688,7 @@ export default function BookingForm() {
                       <input
                         type="tel"
                         {...register('whatsappNumber')}
-                        placeholder="+44 7700 000000"
+                        placeholder="+44 7456 938750"
                         className="input-field"
                       />
                       {errors.whatsappNumber && (

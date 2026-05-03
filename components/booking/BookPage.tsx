@@ -235,7 +235,7 @@ export default function BookPage() {
           <div className="text-center py-8 border-t border-slate-100">
             <p className="text-slate-500 text-sm mb-3">Need help choosing? Our team is available 24/7.</p>
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447700000000'}?text=Hi%2C%20I%27d%20like%20help%20planning%20my%20Umrah%20transport`}
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '447456938750'}?text=Hi%2C%20I%27d%20like%20help%20planning%20my%20Umrah%20transport`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary inline-flex text-sm"

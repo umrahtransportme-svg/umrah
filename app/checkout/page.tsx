@@ -108,7 +108,7 @@ function CheckoutInner() {
                   </div>
                   <div>
                     <label className="label-field"><Phone className="w-3.5 h-3.5 inline mr-1" />WhatsApp Number</label>
-                    <input type="tel" {...register('whatsApp')} placeholder="+44 7700 000000" className="input-field" />
+                    <input type="tel" {...register('whatsApp')} placeholder="+44 7456 938750" className="input-field" />
                     {errors.whatsApp && <p className="text-red-500 text-xs mt-1">{errors.whatsApp.message}</p>}
                   </div>
                 </div>

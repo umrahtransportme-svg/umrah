@@ -248,7 +248,7 @@ export default function AccountPage() {
                 <div className="relative"><Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input type="email" value={user.email || ''} disabled className="input-field pl-9 bg-slate-50 text-slate-500 cursor-not-allowed" /></div>
               </Field>
               <Field label="WhatsApp / Phone Number">
-                <div className="relative"><Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input type="tel" value={profile.phone || ''} onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))} placeholder="+44 7700 000000" className="input-field pl-9" /></div>
+                <div className="relative"><Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input type="tel" value={profile.phone || ''} onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))} placeholder="+44 7456 938750" className="input-field pl-9" /></div>
               </Field>
               <Field label="Nationality / Country">
                 <div className="relative"><Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><select value={profile.nationality || ''} onChange={e => setProfile(p => ({ ...p, nationality: e.target.value }))} className="input-field pl-9"><option value="">Select country...</option>{COUNTRIES.map(c => <option key={c}>{c}</option>)}</select></div>
