@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import {
   LayoutDashboard, CalendarCheck, PoundSterling, Car, Users, Building2,
   Star, BarChart3, Settings, FileText, Image, Plug, Bot, MessageSquare,
-  Wrench, LogOut, X, ChevronRight, Globe,
+  Wrench, LogOut, X, ChevronRight, Globe, AlertCircle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -40,6 +40,7 @@ const NAV = [
     group: 'Operations',
     items: [
       { label: 'Communications',  href: '/admin/communications',  icon: MessageSquare },
+      { label: 'Complaints',      href: '/admin/complaints',      icon: AlertCircle },
       { label: 'Automation',      href: '/admin/automation',      icon: Bot },
       { label: 'Integrations',    href: '/admin/integrations',    icon: Plug },
       { label: 'Reports',         href: '/admin/reports',         icon: BarChart3 },

@@ -9,6 +9,10 @@ function isAuthed(req: NextRequest) {
 export async function GET(req: NextRequest) {
   if (!isAuthed(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  const now = Date.now()
+  const todayStart = new Date()
+  todayStart.setHours(0, 0, 0, 0)
+
   const [
     totalBookings,
     revenueAgg,
@@ -16,6 +20,8 @@ export async function GET(req: NextRequest) {
     pendingBookings,
     prevMonthBookings,
     prevMonthRevenue,
+    completedToday,
+    recentBookings,
   ] = await Promise.all([
     prisma.booking.count(),
     prisma.booking.aggregate({
@@ -28,8 +34,8 @@ export async function GET(req: NextRequest) {
     prisma.booking.count({
       where: {
         createdAt: {
-          gte: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
-          lt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          gte: new Date(now - 60 * 24 * 60 * 60 * 1000),
+          lt: new Date(now - 30 * 24 * 60 * 60 * 1000),
         },
       },
     }),
@@ -38,16 +44,36 @@ export async function GET(req: NextRequest) {
       where: {
         status: { in: ['confirmed', 'completed'] },
         paidAt: {
-          gte: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
-          lt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          gte: new Date(now - 60 * 24 * 60 * 60 * 1000),
+          lt: new Date(now - 30 * 24 * 60 * 60 * 1000),
         },
+      },
+    }),
+    prisma.booking.count({
+      where: {
+        status: 'completed',
+        updatedAt: { gte: todayStart },
+      },
+    }),
+    prisma.booking.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      select: {
+        id: true,
+        reference: true,
+        customerName: true,
+        customerCountry: true,
+        serviceType: true,
+        totalAmount: true,
+        status: true,
+        createdAt: true,
       },
     }),
   ])
 
   const thisMonthBookings = await prisma.booking.count({
     where: {
-      createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
+      createdAt: { gte: new Date(now - 30 * 24 * 60 * 60 * 1000) },
     },
   })
 
@@ -56,7 +82,7 @@ export async function GET(req: NextRequest) {
       _sum: { totalAmount: true },
       where: {
         status: { in: ['confirmed', 'completed'] },
-        paidAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
+        paidAt: { gte: new Date(now - 30 * 24 * 60 * 60 * 1000) },
       },
     })
   )._sum.totalAmount ?? 0
@@ -69,6 +95,13 @@ export async function GET(req: NextRequest) {
     return Math.round(((current - previous) / previous) * 100 * 10) / 10
   }
 
+  // Average booking value (non-cancelled)
+  const validBookingsAgg = await prisma.booking.aggregate({
+    _avg: { totalAmount: true },
+    where: { status: { notIn: ['cancelled', 'refunded'] } },
+  })
+  const avgBookingValue = Math.round(validBookingsAgg._avg.totalAmount ?? 0)
+
   const stats = {
     totalBookings,
     totalRevenue: Math.round(totalRevenue),
@@ -78,6 +111,8 @@ export async function GET(req: NextRequest) {
     revenueChange: changePct(thisMonthRevenue, prevRev),
     driversChange: 0,
     pendingChange: 0,
+    completedToday,
+    avgBookingValue,
   }
 
   // Revenue chart: last 6 months
@@ -144,5 +179,9 @@ export async function GET(req: NextRequest) {
     stats,
     revenueData: months.some((m) => m.revenue > 0) ? months : MOCK_REVENUE_DATA,
     serviceBreakdown,
+    recentBookings: recentBookings.map((b) => ({
+      ...b,
+      createdAt: b.createdAt.toISOString(),
+    })),
   })
 }
