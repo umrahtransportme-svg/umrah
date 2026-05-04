@@ -29,6 +29,7 @@ model User {
   googleId       String?   @unique
   phone          String?
   nationality    String?
+  city           String?
   dateOfBirth    String?
   profilePicture String?   @db.Text
   referralCode   String?   @unique

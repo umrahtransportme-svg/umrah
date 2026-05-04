@@ -11,10 +11,9 @@ import {
 } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { COUNTRIES } from '@/lib/countries'
 
 type Tab = 'profile' | 'passport' | 'bookings' | 'invoices' | 'cards' | 'referrals' | 'complaints'
-
-const COUNTRIES = ['United Kingdom', 'United States', 'Canada', 'Australia', 'Germany', 'France', 'Netherlands', 'Sweden', 'UAE', 'Saudi Arabia', 'Pakistan', 'Bangladesh', 'India', 'Other']
 
 const STATUS_STYLES: Record<string, string> = {
   pending:   'bg-amber-50 text-amber-700 border border-amber-200',
@@ -31,7 +30,7 @@ const COMPLAINT_STATUS: Record<string, string> = {
 }
 
 interface Booking { id: string; reference: string; status: string; serviceType: string; pickupLocation: string; dropoffLocation: string; travelDate: string; passengers: number; vehicleType: string; totalAmount: number; customerName: string; createdAt: string }
-interface Profile { name?: string; phone?: string; nationality?: string; dateOfBirth?: string; profilePicture?: string }
+interface Profile { name?: string; phone?: string; nationality?: string; city?: string; dateOfBirth?: string; profilePicture?: string }
 interface Passport { fullName?: string; passportNumber?: string; nationality?: string; dateOfBirth?: string; issueDate?: string; expiryDate?: string }
 interface SavedCard { id: string; last4: string; brand: string; expMonth: number; expYear: number; cardholderName: string | null; isDefault: boolean }
 interface Referral { id: string; referredEmail: string | null; status: string; commission: number; createdAt: string }
@@ -253,6 +252,7 @@ export default function AccountPage() {
               <Field label="Nationality / Country">
                 <div className="relative"><Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><select value={profile.nationality || ''} onChange={e => setProfile(p => ({ ...p, nationality: e.target.value }))} className="input-field pl-9"><option value="">Select country...</option>{COUNTRIES.map(c => <option key={c}>{c}</option>)}</select></div>
               </Field>
+              <Field label="City"><input type="text" value={profile.city || ''} onChange={e => setProfile(p => ({ ...p, city: e.target.value }))} placeholder="e.g. London" className="input-field" /></Field>
               <Field label="Date of Birth"><input type="date" value={profile.dateOfBirth || ''} onChange={e => setProfile(p => ({ ...p, dateOfBirth: e.target.value }))} className="input-field" /></Field>
               <button onClick={saveProfile} disabled={saving} className="btn-primary py-3 px-6">
                 {saving ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving…</> : saved === 'profile' ? <><CheckCircle className="w-4 h-4" /> Saved!</> : <><Save className="w-4 h-4" /> Save Profile</>}
