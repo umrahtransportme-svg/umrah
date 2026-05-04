@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { handleIncomingMessage } from '@/lib/whatsapp-chatbot'
 
 const WA_API_URL = 'https://graph.facebook.com/v19.0'
+
+const AUTO_REPLY =
+  'Assalamu Alaikum! Thanks for messaging Umrah Transport. Our team will reply shortly. ' +
+  'For urgent matters please call +44 7456 938750 or visit umrahtransport.me.'
 
 // ── Webhook verification (Meta sends a GET to verify the endpoint) ─────────────
 export async function GET(req: NextRequest) {
@@ -45,30 +48,8 @@ async function processWebhook(body: WhatsAppWebhookBody) {
       if (!value?.messages?.length) continue
 
       for (const msg of value.messages) {
-        // Only handle text messages
-        if (msg.type !== 'text') {
-          await sendReply(
-            msg.from,
-            'Assalamu Alaikum! I can only read text messages right now. Please type your question and I\'ll be happy to help 😊'
-          )
-          continue
-        }
-
-        const fromPhone = msg.from
-        const text      = msg.text?.body?.trim()
-        if (!text) continue
-
-        // Mark message as read
         await markRead(msg.id)
-
-        // Send typing indicator
-        await sendTyping(fromPhone)
-
-        // Get AI reply
-        const reply = await handleIncomingMessage(fromPhone, text)
-
-        // Send reply
-        await sendReply(fromPhone, reply)
+        await sendReply(msg.from, AUTO_REPLY)
       }
     }
   }
@@ -106,12 +87,6 @@ async function markRead(messageId: string) {
     status: 'read',
     message_id: messageId,
   })
-}
-
-async function sendTyping(to: string) {
-  // Send a brief reaction to simulate "typing" while AI processes
-  // WhatsApp Cloud API doesn't have a native typing indicator, so we just proceed
-  void to
 }
 
 // ── Types ──────────────────────────────────────────────────────────────────────
