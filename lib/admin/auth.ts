@@ -1,8 +1,17 @@
 import { SignJWT, jwtVerify } from 'jose'
 
-const SECRET = new TextEncoder().encode(
-  process.env.ADMIN_JWT_SECRET || 'umratransport-admin-super-secret-key-2025'
-)
+const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET
+if (!ADMIN_JWT_SECRET) {
+  throw new Error('ADMIN_JWT_SECRET environment variable is required')
+}
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
+if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+  throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required')
+}
+
+const SECRET = new TextEncoder().encode(ADMIN_JWT_SECRET)
 
 export interface AdminJWTPayload {
   userId: string
@@ -29,6 +38,6 @@ export async function verifyAdminToken(token: string): Promise<AdminJWTPayload |
 }
 
 export const ADMIN_CREDENTIALS = {
-  email: process.env.ADMIN_EMAIL || 'admin@umratransport.me',
-  password: process.env.ADMIN_PASSWORD || 'admin123',
+  email: ADMIN_EMAIL,
+  password: ADMIN_PASSWORD,
 }

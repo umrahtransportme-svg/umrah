@@ -99,8 +99,11 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   })
 
   if (existing) {
-    await prisma.booking.update({
-      where: { id: existing.id },
+    // Idempotency: only run the post-payment pipeline once per booking.
+    // updateMany with paidAt:null guard is race-safe — concurrent retries
+    // of the same Stripe event will result in count=0 for all but one call.
+    const result = await prisma.booking.updateMany({
+      where: { id: existing.id, paidAt: null },
       data: {
         status: 'confirmed',
         totalAmount,
@@ -109,6 +112,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         paidAt: new Date(),
       },
     })
+    if (result.count === 0) {
+      console.log(`[Stripe Webhook] Booking ${ref} already processed — skipping`)
+      return
+    }
     await processBookingConfirmed(existing.id)
     return
   }

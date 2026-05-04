@@ -153,6 +153,7 @@ export async function POST(req: NextRequest) {
   // Add new columns to existing tables
   await run('users.profilePicture', () => sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "profilePicture" TEXT`)
   await run('users.referralCode',   () => sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "referralCode" TEXT UNIQUE`)
+  await run('users.city',           () => sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS city TEXT`)
   await run('bookings.vendorId',              () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "vendorId" TEXT REFERENCES vendor_accounts(id)`)
   await run('bookings.vendorAmount',           () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS "vendorAmount" DOUBLE PRECISION NOT NULL DEFAULT 0`)
   await run('bookings.refunded',               () => sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS refunded BOOLEAN NOT NULL DEFAULT false`)

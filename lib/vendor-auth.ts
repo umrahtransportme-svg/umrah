@@ -1,9 +1,12 @@
 import { SignJWT, jwtVerify } from 'jose'
 import bcrypt from 'bcryptjs'
 
-const SECRET = new TextEncoder().encode(
-  process.env.VENDOR_JWT_SECRET || 'umratransport-vendor-secret-key-2025'
-)
+const VENDOR_JWT_SECRET = process.env.VENDOR_JWT_SECRET
+if (!VENDOR_JWT_SECRET) {
+  throw new Error('VENDOR_JWT_SECRET environment variable is required')
+}
+
+const SECRET = new TextEncoder().encode(VENDOR_JWT_SECRET)
 
 export interface VendorJWTPayload {
   vendorId: string
